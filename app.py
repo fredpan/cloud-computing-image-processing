@@ -14,13 +14,13 @@ def hello_world56():
     return render_template("index.html")
 
 
-@app.route('/generic.html')
+@app.route('/upload_management.html')
 def hello_world1():
-    return render_template("generic.html")
+    return render_template("upload_management.html")
 
-@app.route('/gallery.html')
+@app.route('/file_management.html')
 def hello_world2():
-    return render_template("gallery.html")
+    return render_template("file_management.html")
 
 
 if __name__ == '__main__':
