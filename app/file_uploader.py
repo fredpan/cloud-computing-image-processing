@@ -32,7 +32,7 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(webapp.config['UPLOAD_FOLDER'], filename))
-            return "Y"
+            return UPLOAD_FOLDER + filename
 
 
 @webapp.route('/uploads/<filename>')
