@@ -2,12 +2,6 @@ from flask import Flask
 from flask import render_template
 from app import webapp
 
-
-@webapp.route('/index.html')
-def hello_world():
-    return render_template("index.html")
-
-
 @webapp.route('/')
 def hello_world56():
     return render_template("index.html")
