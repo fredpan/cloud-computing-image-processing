@@ -10,6 +10,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="../static/css/main.css" />
+        <link rel="stylesheet" href="../static/css/upload-file.css" />
 	</head>
 	<body>
 		<div class="page-wrap">
@@ -17,7 +18,7 @@
 			<!-- Nav -->
 				<nav id="nav">
 					<ul>
-						<li><a href="index.html"><span class="icon fa-home"></span></a></li>
+						<li><a href="/"><span class="icon fa-home"></span></a></li>
 						<li><a href="file_management.html"><span class="icon fa-camera-retro"></span></a></li>
 						<li><a href="upload_management.html" class="active"><span class="icon fa-file-text-o"></span></a></li>
 					</ul>
@@ -77,23 +78,23 @@
 							<!-- Form -->
 								<div class="column">
 									<h3>Get in Touch</h3>
-									<form action="#" method="post">
-										<div class="field half first">
-											<label for="name">Name</label>
-											<input name="name" id="name" type="text" placeholder="Name">
-										</div>
-										<div class="field half">
-											<label for="email">Email</label>
-											<input name="email" id="email" type="email" placeholder="Email">
-										</div>
-										<div class="field">
-											<label for="message">Message</label>
-											<textarea name="message" id="message" rows="6" placeholder="Message"></textarea>
-										</div>
-										<ul class="actions">
-											<li><input value="Send Message" class="button" type="submit"></li>
-										</ul>
-									</form>
+									<!-- Trigger/Open The Modal -->
+                                    <button id="myBtn">Open Modal</button>
+
+                                    <!-- The Modal -->
+                                    <div id="myModal" class="modal">
+
+                                      <!-- Modal content -->
+                                      <div class="modal-content">
+                                        <span class="close">&times;</span>
+                                            <form method=post enctype=multipart/form-data action="/upload">
+                                                Please upload the file below:<br/>
+                                              <input type=file name=file>
+                                              <input type=submit value=Upload>
+                                            </form>
+                                      </div>
+
+                                    </div>
 								</div>
 
 						</section>
@@ -114,6 +115,7 @@
 			<script src="../static/js/skel.min.js"></script>
 			<script src="../static/js/util.js"></script>
 			<script src="../static/js/main.js"></script>
+            <script src="../static/js/upload-file.js"></script>
 
 	</body>
 </html>
