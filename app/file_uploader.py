@@ -2,8 +2,10 @@ import os
 from app import webapp
 from flask import Flask, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
+from app.opencv import opencv
 
-UPLOAD_FOLDER = '/Users/fredpan/Desktop/123/'
+
+UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 webapp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -32,7 +34,10 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(webapp.config['UPLOAD_FOLDER'], filename))
-            return UPLOAD_FOLDER + filename
+            img_path = UPLOAD_FOLDER + filename
+            print(img_path)
+            opencv.imageProcess(img_path)
+            return "Success"
 
 
 @webapp.route('/uploads/<filename>')
