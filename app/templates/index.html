@@ -14,6 +14,20 @@
             div.padding1 {
                 padding-top: 10px;
             }
+            
+            * {box-sizing: border-box;}
+            .column {
+              float: left;
+              width: 33.33%;
+              padding: 5px;
+            }
+            .row::after {
+              content: "";
+              clear: both;
+              display: table;
+            }
+
+y
         </style>
 	</head>
 	<body>
@@ -70,12 +84,20 @@
 							<!-- Photo Galleries -->
 								<div class="gallery">
 									<header class="special">
-										<h2>What's New</h2>
+										<h2>Example Photos Processed by OpenCV Text Detection Engine:</h2>
 									</header>
 									<div class="content">
-										<div class="media">
-											<a href="../static/images/fulls/pipixia.jpg"><img src="../static/images/thumbs/pipixia.jpg" alt="" title=" LONG LIVE THE MANTIS SHRIMP KING !" /></a>
-										</div>
+                                        <div class="row">
+                                          <div class="column">
+                                            <img src="../static/images/thumbs/01.jpg"" alt="Snow" style="width:100%">
+                                          </div>
+                                          <div class="column">
+                                            <img src="../static/images/thumbs/02.jpg"" alt="Forest" style="width:100%">
+                                          </div>
+                                          <div class="column">
+                                            <img src="../static/images/thumbs/03.jpg"" alt="Mountains" style="width:100%">
+                                          </div>
+                                        </div>
 									</div>
 								</div>
 						</section>
