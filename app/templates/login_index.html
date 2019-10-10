@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Snapshot by TEMPLATED</title>
+		<title>{{title}}</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="../static/css/main.css" />
@@ -27,7 +27,14 @@
               display: table;
             }
 
-y
+            input.extra {
+            color: black;
+            }
+
+            h3.error{
+                color:yellow;
+            }
+
         </style>
 	</head>
 	<body>
@@ -46,20 +53,20 @@ y
 					<!-- Banner -->
 						<section id="banner">
 							<div class="inner">
-								<h2>Hey, Welcome to Image Text Identification Process Engine</h2>
-                                <h3> (ECE1779:Introduction to Cloud Computing Project) </h3>
-                                <p></p>
-								<h3 align="left">Please Login: {{error if error != None}}</h3>
+								<h2>Welcome to Image Text Identification Process Engine</h2>
+                                <h3> ECE1779:Introduction to Cloud Computing Project </h3>
+                                <h3> (username:admin, password:admin) </h3>
+                                <h3 class="error" >{{error if error != None}}</h3>
                                 <form action='login_submit' method='post'>
                                 <div align="left">
                                     <h4>Username:</h4>
-                                    <input name='username' type='text'>
+                                    <input class = "extra" name='username' type='text' value='{{username if username != None}}'>
                                 </div>
                                 <div align="left">
                                     <h4>Password:</h4>
-                                    <input name='password' type='password'>
+                                    <input class = "extra" name='password' type='password'>
                                 </div>
-                                    <div class = "padding1" align="right"><input type="checkbox" id="checkbox" name="remember" checked><label for="checkbox">Remember me</label></div>
+                                    <div class = "padding1" align="right"><input type="checkbox" id="checkbox" name="remember" checked><label for="checkbox">Remember Password</label></div>
                                     <div style="width: 100%; overflow: hidden;">
                                         <div style="width: 0px; float: left;">
                                             <a href="#galleries" class="button alt scrolly big">Signup</a>
@@ -68,13 +75,7 @@ y
                                             <input class="button alt scrolly big" type='submit' value='Login'>
                                         </div>
                                     </div>
-
-
-
-
                             </form>
-
-
 							</div>
 
 						</section>

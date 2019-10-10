@@ -4,6 +4,7 @@ import time
 import mysql.connector
 from flask import render_template, redirect, url_for, request, g, session
 from app import webapp
+from app.route_sample import go_to_main_page
 from app.sql.config.config import db_config
 
 # The function used to establish connection to sql database
@@ -22,38 +23,34 @@ Login Settings
 ############################################################
 """
 
-
-@webapp.route('/login', methods=['GET'])
-# Display an empty HTML form that allows users to fill in info to login
-def user_login():
-    return render_template("account/login_form.html", title="Login!")
-
 @webapp.route('/login', methods=['GET', 'POST'])
-def login():
-    return render_template("login_form.html")
+def user_login():
+    return render_template("/login_index.html", title="Welcome")
 
 @webapp.route('/login_submit', methods=['POST'])
 def login_submit():
+
+    username = request.form['username']
+    password = request.form['password']
+
     # connect to database
     cnx = get_database()
     cursor = cnx.cursor()
-    query = "SELECT COUNT(user_name) FROM user_info WHERE user_name = %s and user_key = %s "
-    cursor.execute(query, (request.form['username'], request.form['password']))
+    query = "SELECT COUNT(username) FROM user_info WHERE username = %s and password = %s and active = 1"
+    cursor.execute(query, (username, password))
     results = cursor.fetchall()
     numberOfMatchedResults = results[0][0]
 
     if numberOfMatchedResults == 1:
         session['authenticated'] = True
-        session['username'] = request.form['username']
-        session['error'] = False
+        session['username'] = username
+        session['error'] = None
         return redirect(url_for('sensitive'))
 
-    if 'username' in request.form:
-        session['username'] = request.form['username']
+    session['username'] = username
+    session['error'] = "<=Error! Incorrect username or password!=>"
 
-    session['error'] = "Error! Incorrect username or password!"
-
-    return render_template("/account/login_form.html", title="Login!", error="Error! Incorrect username or password!")
+    return render_template("/login_index.html", title="Main Page", username = username, error=session['error'])
 
 """
 #############################################################
@@ -131,22 +128,22 @@ Secure Index
 @webapp.route('/secure/index', methods=['GET', 'POST'])
 def sensitive():
     if 'authenticated' not in session:
-        return redirect(url_for('login'))
+        return redirect(url_for('user_login'))
 
     # connect to database
     cnx = get_database()
     cursor = cnx.cursor()
-    query = "SELECT user_create_date FROM user_info WHERE user_name = %s "
+    query = "SELECT create_date FROM user_info WHERE username = %s"
     cursor.execute(query, (session['username'],))
     results = cursor.fetchall()
-    memberSince = results[0][0]
+    membersince = results[0][0]
 
-    return render_template("/account/login_succeed.html", name=session['username'], date=memberSince)
+    return render_template("/secured_index.html", name=session['username'], membersince=membersince)
 
 @webapp.route('/logout', methods=['GET', 'POST'])
 def logout():
     session.clear()
-    return redirect(url_for('sensitive'))
+    return redirect(url_for("sensitive"))
 
 
 
