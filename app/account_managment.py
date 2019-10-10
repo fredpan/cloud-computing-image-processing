@@ -7,6 +7,7 @@ from app import webapp
 from app.route_sample import go_to_main_page
 from app.sql.config.config import db_config
 
+
 # The function used to establish connection to sql database
 def connect_to_database():
     return mysql.connector.connect(user=db_config['user'],password=db_config['password'],host=db_config['host'],database=db_config['database'])
