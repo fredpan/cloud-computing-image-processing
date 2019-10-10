@@ -1531,11 +1531,15 @@
 		}
 
 		#banner h1 {
-			font-size: 4em;
+			font-size: 2.5em;
 			line-height: 1.0em;
 			margin: 0 0 0.5em 0;
 			padding: 0;
 			color: #FFF;
+		}
+
+		#banner h3 {
+			font-size: 1.5em;
 		}
 
 		#banner p {
@@ -1551,7 +1555,11 @@
 		@media screen and (max-width: 1280px) {
 
 			#banner h1 {
-				font-size: 3.5em;
+				font-size: 1.8em;
+			}
+
+			#banner h3 {
+			font-size: 1.2em;
 			}
 
 		}
@@ -1563,11 +1571,15 @@
 			}
 
 				#banner h1 {
-					font-size: 2.25em;
+					font-size: 1.2em;
+				}
+
+					#banner h3 {
+					font-size: 1.0em;
 				}
 
 				#banner p {
-					font-size: 1.25em;
+					font-size: 1.0em;
 				}
 
 		}
