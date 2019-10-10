@@ -2,17 +2,16 @@ from flask import Flask
 from flask import render_template
 from app import webapp
 
-
 @webapp.route('/')
-def hello_world56():
+def go_to_main_page():
     return render_template("index.html")
 
 
 @webapp.route('/upload_management.html')
-def hello_world1():
+def upload_management():
     return render_template("upload_management.html")
 
 
 @webapp.route('/file_management.html')
-def hello_world2():
+def file_management():
     return render_template("file_management.html")

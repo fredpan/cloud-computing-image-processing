@@ -10,6 +10,11 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="../static/css/main.css" />
+        <style>
+            div.padding1 {
+                padding-top: 10px;
+            }
+        </style>
 	</head>
 	<body>
 		<div class="page-wrap">
@@ -18,8 +23,6 @@
 				<nav id="nav">
 					<ul>
 						<li><a href="/" class="active"><span class="icon fa-home"></span></a></li>
-						<li><a href="file_management.html"><span class="icon fa-camera-retro"></span></a></li>
-						<li><a href="upload_management.html"><span class="icon fa-file-text-o"></span></a></li>
 					</ul>
 				</nav>
 
@@ -30,12 +33,35 @@
 						<section id="banner">
 							<div class="inner">
 								<h1>Hey, Welcome to ECE 1779</h1>
-								<p>Please log in/sign up</p>
-								<ul class="actions">
-									<li><a href="#galleries" class="button alt scrolly big">Login</a></li>
-                                    <li><a href="#galleries" class="button alt scrolly big">Signup</a></li>
-								</ul>
+                                <h3>Photo Image Identification System </h3>
+								<h3 align="left">Please Login: {{error if error != None}}</h3>
+                                <form action='login_submit' method='post'>
+                                <div align="left">
+                                    <h4>Username:</h4>
+                                    <input name='username' type='text'>
+                                </div>
+                                <div align="left">
+                                    <h4>Password:</h4>
+                                    <input name='password' type='password'>
+                                </div>
+                                    <div class = "padding1" align="right"><input type="checkbox" id="checkbox" name="remember" checked><label for="checkbox">Remember me</label></div>
+                                    <div style="width: 100%; overflow: hidden;">
+                                        <div style="width: 0px; float: left;">
+                                            <a href="#galleries" class="button alt scrolly big">Signup</a>
+                                        </div>
+                                        <div align="right">
+                                            <input class="button alt scrolly big" type='submit' value='Login'>
+                                        </div>
+                                    </div>
+
+
+
+
+                            </form>
+
+
 							</div>
+
 						</section>
 
 					<!-- Gallery -->
@@ -48,12 +74,9 @@
 									</header>
 									<div class="content">
 										<div class="media">
-											<a href="../static/images/fulls/pipixia.jpg"><img src="../static/images/thumbs/pipixia.jpg" alt="" title="This right here is a caption." /></a>
+											<a href="../static/images/fulls/pipixia.jpg"><img src="../static/images/thumbs/pipixia.jpg" alt="" title=" LONG LIVE THE MANTIS SHRIMP KING !" /></a>
 										</div>
 									</div>
-									<footer>
-										<a href="file_management.html" class="button big">Full Gallery</a>
-									</footer>
 								</div>
 						</section>
 

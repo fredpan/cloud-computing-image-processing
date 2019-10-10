@@ -3,14 +3,9 @@ from app import webapp
 from flask import Flask, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 from app.opencv import opencv
-
-
 UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 webapp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-
-webapp.secret_key = '\x80\xa9s*\x12\xc7x\xa9d\x1f(\x03\xbeHJ:\x9f\xf0!\xb1a\xaa\x0f\xee'
 
 
 def allowed_file(filename):
@@ -42,5 +37,4 @@ def upload_file():
 
 @webapp.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(webapp.config['UPLOAD_FOLDER'],
-                               filename)
+    return send_from_directory(webapp.config['UPLOAD_FOLDER'],filename)
