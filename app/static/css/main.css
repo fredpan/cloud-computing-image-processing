@@ -430,6 +430,7 @@
 		input[type="reset"].big,
 		input[type="button"].big,
 		button.big,
+
 		.button.big {
 			font-size: 1.35em;
 			padding: 0 2em;
