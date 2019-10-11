@@ -6,6 +6,7 @@ from flask import render_template, redirect, url_for, request, g, session
 from app import webapp
 from app.route_sample import go_to_main_page
 from app.sql.config.config import db_config
+from app import send_email as email_confirmation
 
 
 # The function used to establish connection to sql database
@@ -147,6 +148,22 @@ Send Email
 ############################################################
 """
 
+@webapp.route('/signup/send_email', methods=['POST'])
+# Create a new account and save them in the database.
+def send_email():
+    # need to trim the user name
+    email = request.form.get('email', "")
+    username = request.form.get('username', "")
+    password = request.form.get('password', "")
+
+    if not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", email):
+        error_msg = "Error: Not a correct email address!"
+        return render_template("signup_succeed_index.html", title="Sign Up Succeed", username=username, password=password, error_msg=error_msg)
+
+    # send email
+    email_confirmation.send_email(email,username,password)
+    success_msg = "=================Email Sent!==================="
+    return render_template("signup_succeed_index.html", title="Sign Up Succeed", username=username, password=password, success_msg = success_msg)
 
 
 

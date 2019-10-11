@@ -57,11 +57,14 @@
                                 <h3> Please Remember Your Account Name and Password: </h3>
                                 <h3> Account Name: <span style="color: yellow">{{ username }}</span></h3>
                                 <h3> Password: <span style="color: yellow">{{ password }}</span></h3>
-
-                                <form action='/send_email' method='post'>
+                                <h3 class="error" >{{error_msg if error_msg != None}}</h3>
+                                <h3 class="error" >{{success_msg if success_msg != None}}</h3>
+                                <form action='/signup/send_email' method='post'>
                                     <div align="left">
                                         <h4>Send The Info to my email@:</h4>
                                         <input name='email' type='text' value='{{email if email  != None}}'>
+                                        <input name='username' type="text" value="{{ username }}">
+                                        <input name='password' type="text" value="{{ password }}">
                                     </div>
                                     <p></p>
                                     <div style="width: 100%; overflow: hidden;">

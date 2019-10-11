@@ -7,8 +7,8 @@ def send_email(receiver, account, password):
     msg = MIMEMultipart()
     msg['From'] = 'pipixia.ca@outlook.com'
     msg['To'] = receiver
-    msg['Subject'] = 'Welcome to the Party! ---From Pipixia'
-    message = 'Welcome to the pipixia\'s domain!\n Your account name is: {0}\n Your login password is: {1} \n LONG LIVE THE MANTIS SHRIMP KING !'
+    msg['Subject'] = 'Welcome to Image Text Identification Process Engine ----ECE1779 Project1'
+    message = 'Welcome to Image Text Identification Process Engine\n Your account name is: {0}\n Your login password is: {1} \n Thanks for the registeration.'
     message = message.format(account, password)
     msg.attach(MIMEText(message))
 
