@@ -135,7 +135,7 @@ def sensitive():
     results = cursor.fetchall()
     membersince = results[0][0]
 
-    return render_template("/secured_index.html", name=session['username'], membersince=membersince)
+    return render_template("/secured_index.html", username=session['username'], membersince=membersince)
 
 @webapp.route('/logout', methods=['GET', 'POST'])
 def logout():
