@@ -53,30 +53,27 @@
 					<!-- Banner -->
 						<section id="banner">
 							<div class="inner">
-								<h2>Welcome to Image Text Identification Process Engine</h2>
-                                <h3> ECE1779:Introduction to Cloud Computing Project </h3>
-                                <h3 class="error" >{{error if error != None}}</h3>
-                                <form action='login_submit' method='post'>
-                                <div align="left">
-                                    <h4>Username:</h4>
-                                    <input class = "extra" name='username' type='text' value='{{username if username != None}}'>
-                                </div>
-                                <div align="left">
-                                    <h4>Password:</h4>
-                                    <input class = "extra" name='password' type='password'>
-                                </div>
-                                    <div class = "padding1" align="right"><input type="checkbox" id="checkbox" name="remember" checked><label for="checkbox">Remember Password</label></div>
+                                <h2>Congratulations! <span style="color: yellow">{{ username }}</span> You Have Successfully Signed Up!</h2>
+                                <h3> Please Remember Your Account Name and Password: </h3>
+                                <h3> Account Name: <span style="color: yellow">{{ username }}</span></h3>
+                                <h3> Password: <span style="color: yellow">{{ password }}</span></h3>
+
+                                <form action='/send_email' method='post'>
+                                    <div align="left">
+                                        <h4>Send The Info to my email@:</h4>
+                                        <input name='email' type='text' value='{{email if email  != None}}'>
+                                    </div>
+                                    <p></p>
                                     <div style="width: 100%; overflow: hidden;">
                                         <div style="width: 0px; float: left;">
-                                            <a href="/signup" class="button alt scrolly big">Signup</a>
+                                                <a href="/" class="button alt scrolly big" type="submit">Back Home</a>
                                         </div>
                                         <div align="right">
-                                            <input class="button alt scrolly big" type='submit' value='Login'>
+                                            <input class="button alt scrolly big" type='submit' value='Send'>
                                         </div>
                                     </div>
-                            </form>
+                                </form>
 							</div>
-
 						</section>
 
 					<!-- Gallery -->

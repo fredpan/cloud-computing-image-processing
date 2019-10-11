@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>{{title}}</title>
+		<title>Sign Up</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="../static/css/main.css" />
@@ -35,6 +35,8 @@
                 color:yellow;
             }
 
+
+
         </style>
 	</head>
 	<body>
@@ -55,27 +57,34 @@
 							<div class="inner">
 								<h2>Welcome to Image Text Identification Process Engine</h2>
                                 <h3> ECE1779:Introduction to Cloud Computing Project </h3>
-                                <h3 class="error" >{{error if error != None}}</h3>
-                                <form action='login_submit' method='post'>
-                                <div align="left">
-                                    <h4>Username:</h4>
-                                    <input class = "extra" name='username' type='text' value='{{username if username != None}}'>
-                                </div>
-                                <div align="left">
-                                    <h4>Password:</h4>
-                                    <input class = "extra" name='password' type='password'>
-                                </div>
-                                    <div class = "padding1" align="right"><input type="checkbox" id="checkbox" name="remember" checked><label for="checkbox">Remember Password</label></div>
+                                <h3> Please Sign Up </h3>
+                                <h3 class="error" >{{error_msg if error_msg != None}}</h3>
+                                <form action='/signup/save' method='post'>
+                                    <div align="left">
+                                        <h4>Login Name</h4>
+                                        <input name='username' type='text' value='{{username if username  != None}}'>
+                                    </div>
+
+                                    <div align="left">
+                                        <h4>Password</h4>
+                                        <input name='password1' type='password' value='{{password1 if password1  != None}}'>
+                                    </div>
+
+                                    <div align="left">
+                                        <h4>Re-enter Password</h4>
+                                        <input name='password2' type='password' value='{{password2 if password2  != None}}'>
+                                    </div>
+                                    <p></p>
                                     <div style="width: 100%; overflow: hidden;">
                                         <div style="width: 0px; float: left;">
-                                            <a href="/signup" class="button alt scrolly big">Signup</a>
+                                            <a href="/" class="button alt scrolly big" type="submit">Back Home</a>
                                         </div>
                                         <div align="right">
-                                            <input class="button alt scrolly big" type='submit' value='Login'>
+                                            <input class="button alt scrolly big" type='submit' value='Submit'>
                                         </div>
                                     </div>
-                            </form>
-							</div>
+                                </form>
+                            </div>
 
 						</section>
 

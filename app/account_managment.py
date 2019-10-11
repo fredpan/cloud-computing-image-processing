@@ -62,63 +62,58 @@ Sign up Settings
 @webapp.route('/signup', methods=['GET'])
 # Display an empty HTML form that allows users to fill the info and sign up.
 def user_signup():
-    return render_template("account/sign_up_form.html", title="Join Us!")
+    return render_template("signup_index.html", title="Join Us!")
 
 @webapp.route('/signup/save', methods=['POST'])
-# Create a new student and save them in the database.
+# Create a new account and save them in the database.
 def sign_up_save():
     # need to trim the user name
     username = request.form.get('username', "")
     password1 = request.form.get('password1', "")
     password2 = request.form.get('password2', "")
-    email = request.form.get('email', "")
-
-    error = False
 
     # connect to database
     cnx = get_database()
     cursor = cnx.cursor()
-    query = "SELECT COUNT(user_name) FROM user_info WHERE user_name = %s "
+    query = "SELECT COUNT(username) FROM user_info WHERE username = %s "
     cursor.execute(query, (username,))
     results = cursor.fetchall()
     numberOfExistUser = results[0][0]
 
-    if numberOfExistUser != 0:
-        error = True
-        error_msg = "Error: User name already exist!"
 
-    if username == "" or password1 == "" or password2 == "" or email == "":
-        error = True
+    if username == "" or password1 == "" or password2 == "":
         error_msg = "Error: All fields are required!"
+        return render_template("signup_index.html", title="Sign Up", error_msg=error_msg,
+                               username=username, password1=password1, password2=password2)
 
-    if not error and not re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", email):
-        error = True
-        error_msg = "Error: Not a correct email address!"
+    if re.findall(r'\s+',username)!=[]:
+        error_msg = "Error: No space allowed in user name!"
+        return render_template("signup_index.html", title="Sign Up", error_msg=error_msg,
+                               username=username, password1=password1, password2=password2)
+
+    if numberOfExistUser != 0:
+        error_msg = "Error: User name already exist!"
+        return render_template("signup_index.html", title="Sign Up", error_msg=error_msg,
+                               username=username, password1=password1, password2=password2)
 
     if not (password1 == password2):
-        error = True
         error_msg = "Error: Two passwords not matching!"
-
-    if error:
-        return render_template("account/sign_up_form.html", title="Join Us!", error_msg=error_msg,
-                               username=username, email=email, password1=password1, password2=password2)
+        return render_template("signup_index.html", title="Sign Up", error_msg=error_msg,
+                               username=username, password1=password1, password2=password2)
 
     ts = time.time()
     timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
-    query = ''' INSERT INTO user_info (user_name,user_key,user_email,user_create_date)
-                       VALUES (%s,%s, %s,%s)
+    query = ''' INSERT INTO user_info (username,password,create_date,active)
+                       VALUES (%s,%s, %s,1)
     '''
 
-    cursor.execute(query, (username, password1, email, timestamp))
+    cursor.execute(query, (username, password1, timestamp))
     cnx.commit()
 
     # Add error catch here for sql
 
-    # Send Email
-    send_email.send_email(email, username, password1)
-
-    return render_template("/account/register_succeed.html", title="You are In!", name=username, password=password1)
+    return render_template("signup_succeed_index.html", title="Sign Up Succeed", username=username, password=password1)
 
 
 """
@@ -146,7 +141,11 @@ def logout():
     session.clear()
     return redirect(url_for("sensitive"))
 
-
+"""
+#############################################################
+Send Email
+############################################################
+"""
 
 
 
