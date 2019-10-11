@@ -37,8 +37,8 @@ y
 				<nav id="nav">
 					<ul>
 						<li><a href="/" class="active"><span class="icon fa-home"></span></a></li>
-                        <li><a href="file_management.html" class="active"><span class="icon fa-camera-retro"></span></a></li>
-						<li><a href="upload_management.html"><span class="icon fa-file-text-o"></span></a></li>
+                        <li><a href="/file_management.html" class="active"><span class="icon fa-camera-retro"></span></a></li>
+						<li><a href="/upload_management.html"><span class="icon fa-file-text-o"></span></a></li>
 					</ul>
 				</nav>
 
@@ -50,9 +50,13 @@ y
 							<div class="inner">
 								<h2>Welcome! <span style="color: yellow">{{ username }}</span></h2>
                                 <h2>Member Since: <span style="color: yellow">{{ membersince }}</span></h2>
-                                <form action='/logout' method='post'>
-                                    <input class = "button" type="submit" value="Logout">
-                                </form>
+                                <div>
+                                    <a href="/file_management.html" class="button">Photo Gallery</a>
+                                    <a href="/upload_management.html" class="button">Process New Photo</a>
+                                    <p></p>
+                                    <form action='/logout' method='post'>
+                                        <input align="right" class = "button" type="submit" value="Logout">
+                                    </form>
 							</div>
 
 						</section>
