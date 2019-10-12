@@ -76,4 +76,5 @@ def imageProcess(loadImgPath):
 		cv2.rectangle(orig, (startX, startY), (endX, endY), (0, 255, 0), 2)
 
 	cv2.imwrite(file_uploader.UPLOAD_FOLDER + '/outputImg.jpg',orig)
+
 	return True

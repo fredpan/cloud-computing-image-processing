@@ -31,7 +31,6 @@ def user_login():
 
 @webapp.route('/login_submit', methods=['POST'])
 def login_submit():
-
     username = request.form['username']
     password = request.form['password']
 
@@ -127,15 +126,20 @@ def sensitive():
     if 'authenticated' not in session:
         return redirect(url_for('user_login'))
 
-    # connect to database
-    cnx = get_database()
-    cursor = cnx.cursor()
-    query = "SELECT create_date FROM user_info WHERE username = %s"
-    cursor.execute(query, (session['username'],))
-    results = cursor.fetchall()
-    membersince = results[0][0]
+    if session['authenticated'] == True:
+        # connect to database
+        cnx = get_database()
+        cursor = cnx.cursor()
+        query = "SELECT create_date FROM user_info WHERE username = %s"
+        cursor.execute(query, (session['username'],))
+        results = cursor.fetchall()
+        membersince = results[0][0]
 
-    return render_template("/secured_index.html", username=session['username'], membersince=membersince)
+        session['membersince'] = membersince
+
+        return render_template("/secured_index.html", username=session['username'], membersince=session['membersince'])
+    else:
+        return redirect(url_for('user_login'))
 
 @webapp.route('/logout', methods=['GET', 'POST'])
 def logout():

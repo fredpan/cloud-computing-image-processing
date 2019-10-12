@@ -37,8 +37,8 @@ y
 				<nav id="nav">
 					<ul>
 						<li><a href="/" class="active"><span class="icon fa-home"></span></a></li>
-                        <li><a href="/file_management.html" class="active"><span class="icon fa-camera-retro"></span></a></li>
-						<li><a href="/upload_management.html"><span class="icon fa-file-text-o"></span></a></li>
+                        <li><a href="/file_management"><span class="icon fa-camera-retro"></span></a></li>
+						<li><a href="/upload_management"><span class="icon fa-file-text-o"></span></a></li>
 					</ul>
 				</nav>
 
@@ -51,8 +51,8 @@ y
 								<h2>Welcome! <span style="color: yellow">{{ username }}</span></h2>
                                 <h2>Member Since: <span style="color: yellow">{{ membersince }}</span></h2>
                                 <div>
-                                    <a href="/file_management.html" class="button">Photo Gallery</a>
-                                    <a href="/upload_management.html" class="button">Process New Photo</a>
+                                    <a href="/file_management" class="button">Photo Gallery</a>
+                                    <a href="/upload_management" class="button">Process New Photo</a>
                                     <p></p>
                                     <form action='/logout' method='post'>
                                         <input align="right" class = "button" type="submit" value="Logout">
@@ -67,8 +67,8 @@ y
 							<!-- Photo Galleries -->
 								<div class="gallery">
 									<header class="special">
-										<h2>Example Photos Processed by OpenCV Text Detection Engine:</h2>
-									</header>
+										<h2 style="padding-left: 10px; padding-top: 20px;">Example Photos Processed by OpenCV Text Detection Engine:</h2>
+                                    </header>
 									<div class="content">
                                         <div class="row">
                                           <div class="column">
@@ -84,6 +84,16 @@ y
 									</div>
 								</div>
 						</section>
+
+                        <hr/>
+                        <div style="padding-left: 10px">
+                            <div>Image Text Identification Process Engine</div>
+                            <div>ECE1779:Introduction to Cloud Computing</div>
+                            <div>by: FelixHong, FredPan, ChrisXu</div>
+                        </div>
+                        <div style="padding-left: 10px">
+                            &copy; Design Template Source: <a href="https://templated.co/">TEMPLATED</a>.
+                        </div>
 
 				</section>
 		</div>
