@@ -1,24 +1,26 @@
 # USAGE
 # python text_detection.py --image images/lebron_james.jpg --east frozen_east_text_detection.pb
-
 # import the necessary packages
 from imutils.object_detection import non_max_suppression
 import numpy as np
 import argparse
 import time
 import cv2
-from app import file_uploader
 
-#imagePath = "images/sign.jpg"
+#for test
+#folderPath = "/home/yixiao/Desktop/img_database/"
+#imgName = "IMG-2019-Slider-01.jpg"
+#saveImgName = "s_IMG-2019-Slider-01.jpg"
 
-def imageProcess(loadImgPath):
-	image = cv2.imread(loadImgPath)
-	orig = image.copy()
+
+def imageProcess(folderPath,imgName,saveImgName):
+
+	image = cv2.imread(folderPath + imgName)
+	originalImgCopy = image.copy()
 	(H, W) = image.shape[:2]
 	(newW, newH) = (320, 320)
 	rW = W / float(newW)
 	rH = H / float(newH)
-
 	image = cv2.resize(image, (newW, newH))
 	(H, W) = image.shape[:2]
 
@@ -73,8 +75,12 @@ def imageProcess(loadImgPath):
 		startY = int(startY * rH)
 		endX = int(endX * rW)
 		endY = int(endY * rH)
-		cv2.rectangle(orig, (startX, startY), (endX, endY), (0, 255, 0), 2)
+		cv2.rectangle(originalImgCopy, (startX, startY), (endX, endY), (0, 255, 0), 2)
 
-	cv2.imwrite(file_uploader.UPLOAD_FOLDER + '/outputImg.jpg',orig)
+	#save the processed img
+	cv2.imwrite(folderPath + saveImgName, originalImgCopy)
 
 	return True
+
+#for test
+#print(imageProcess(folderPath,imgName,saveImgName))

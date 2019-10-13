@@ -104,8 +104,8 @@ def sign_up_save():
     ts = time.time()
     timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
-    query = ''' INSERT INTO user_info (username,password,create_date,active)
-                       VALUES (%s,%s, %s,1)
+    query = ''' INSERT INTO user_info (username,password,create_date,active,upload_counter)
+                       VALUES (%s,%s, %s,1,0)
     '''
 
     cursor.execute(query, (username, password1, timestamp))
@@ -126,16 +126,21 @@ def sensitive():
     if 'authenticated' not in session:
         return redirect(url_for('user_login'))
 
+    #==========Read user Info and sign in =========#
     if session['authenticated'] == True:
         # connect to database
         cnx = get_database()
         cursor = cnx.cursor()
-        query = "SELECT create_date FROM user_info WHERE username = %s"
+        query = "SELECT uid,  upload_counter , create_date FROM user_info WHERE username = %s and active = 1"
         cursor.execute(query, (session['username'],))
         results = cursor.fetchall()
-        membersince = results[0][0]
+        uid = results[0][0]
+        uploadCounter = results[0][1]
+        memberSince = results[0][2]
 
-        session['membersince'] = membersince
+        session['uid'] = uid
+        session['uploadCounter'] = uploadCounter
+        session['membersince'] = memberSince
 
         return render_template("/secured_index.html", username=session['username'], membersince=session['membersince'])
     else:

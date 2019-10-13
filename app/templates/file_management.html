@@ -10,8 +10,90 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="../static/css/main.css" />
+
+        <style>
+            * {box-sizing: border-box;}
+            .column {
+              float: left;
+              width: 33.33%;
+              padding: 5px;
+            }
+            .row::after {
+              content: "";
+              clear: both;
+              display: table;
+            }
+
+            input.extra {
+            color: black;
+            }
+
+            h3.error{
+                color:red;
+            }
+
+            h3.info{
+                color:blue;
+            }
+
+            img.show{
+                width: 50%%;
+                max-width: 200px;
+            }
+
+
+            /* The Modal (background) */
+            .modal {
+              display: none; /* Hidden by default */
+              position: fixed; /* Stay in place */
+              z-index: 1; /* Sit on top */
+              padding-top: 100px; /* Location of the box */
+              left: 30px;
+              top: 0;
+              width: 100%; /* Full width */
+              height: 100%; /* Full height */
+              overflow: auto; /* Enable scroll if needed */
+              background-color: rgb(0,0,0); /* Fallback color */
+              background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            }
+
+            /* Modal Content */
+            .modal-content {
+              background-color: #fefefe;
+              margin: auto;
+              padding: 20px;
+              border: 1px solid #888;
+              width: 80%;
+                max-width: 600px;
+            }
+
+            /* The Close Button */
+            .close {
+              color: #aaaaaa;
+              float: right;
+              font-size: 28px;
+              font-weight: bold;
+            }
+
+            .close:hover,
+            .close:focus {
+              color: #000;
+              text-decoration: none;
+              cursor: pointer;
+            }
+
+            img.modalimg{
+                width: 80%;
+            }
+
+
+
+        </style>
+
+
 	</head>
-	<body>
+
+    <body>
 		<div class="page-wrap">
 
 			<!-- Nav -->
@@ -23,47 +105,65 @@
 					</ul>
 				</nav>
 
-			<!-- Main -->
+						<!-- Main -->
 				<section id="main">
 
-					<!-- Gallery -->
-						<section id="galleries">
+					<!-- Header -->
+						<header id="header" >
+							<div align="left" >
+                                <h2>Uploaded Photos: </h2>
+                            </div>
+                            <hr/>
+						</header>
 
-							<!-- Photo Galleries -->
-								<div class="gallery">
+                    <section id="mysection">
 
-									<!-- Filters -->
-										<header>
-											<ul class="tabs">
-												<li><a href="#" data-tag="all" class="button active">All</a></li>
-												<li><a href="#" data-tag="people" class="button">People</a></li>
-												<li><a href="#" data-tag="place" class="button">Places</a></li>
-												<li><a href="#" data-tag="thing" class="button">Things</a></li>
-											</ul>
-										</header>
+                        {% if fileNumber == 0 %}
+                            <div class="pad">
+                                <h3 style="color: red">No Image Uploaded, Try upload one?</h3>
+                                <a href="/upload_management" class="button">Process New Photo</a>
+                            </div>
+                        {% else %}
+                            <!-- show -->
 
-										<div class="content">
-                                            <div>
-                                                <h1>Gallery</h1>
-                                            </div>
-											<div>
-												<a href="../static/images/fulls/pipixia.jpg"><img src="../static/images/thumbs/pipixia.jpg" alt="" title=" LONG LIVE THE MANTIS SHRIMP KING !" /></a>
-											</div>
-										</div>
-								</div>
-						</section>
+                            {%for dict in dictList %}
+                                <!-- ==================== Loop Start ====================-->
+                                <div class="pad">
+                                    <h2>{{dict["userFileName"]}}</h2>
+                                <img class="show hover-shadow cursor" src="/uploads/{{ dict["cloudSaveFilename"] }}"  class="hover-shadow">
+                                 <!-- Trigger/Open The Modal -->
+                                    <p><button id="{{dict["buttonID"]}}">Open Modal</button></p>
+                                </div>
+                                <hr/>
 
-					<!-- Footer -->
-                    <hr/>
-                    <div class="copyright" >
-                        <div>Image Text Identification Process Engine</div>
-                        <div>ECE1779:Introduction to Cloud Computing</div>
-                        <div>by: FelixHong, FredPan, ChrisXu</div>
-                    </div>
-                    <div class="copyright" >
-                        &copy; Design Template Source: <a href="https://templated.co/">TEMPLATED</a>. Images: <a href="https://unsplash.com/">Unsplash</a>.
-                    </div>
+                                    <!-- The Modal -->
+                                    <div id="{{dict["modalID"]}}" class="modal">
+                                      <!-- Modal content -->
+                                      <div class="modal-content">
+                                        <span id="{{dict["closeID"]}}" class="close">&times;</span>
+                                            <p>{{dict["userFileName"]}}</p>
+                                              <p><img class="modalimg" src="/uploads/{{ dict["cloudSaveFilename"] }}" alt="{{dict["userFileName"]}}"></p>
+                                              <p>{{dict["processedUserFileName"]}}</p>
+                                              <p><img class="modalimg" src="/uploads/{{ dict["cloudProcessedFileName"] }}" alt="alt="{{dict["processedUserFileName"]}}""></p>
+                                      </div>
 
+                                    </div>
+                                <!-- ==================== Loop End ====================-->
+
+                            {%endfor%}
+
+                        {% endif %}
+
+                        <!-- Footer -->
+                        <div class="copyright" >
+                            <div>Image Text Identification Process Engine</div>
+                            <div>ECE1779:Introduction to Cloud Computing</div>
+                            <div>by: FelixHong, FredPan, ChrisXu</div>
+                        </div>
+                        <div class="copyright" >
+                            &copy; Design Template Source: <a href="https://templated.co/">TEMPLATED</a>.
+                        </div>
+                    </section>
 				</section>
 		</div>
 
@@ -74,6 +174,35 @@
 			<script src="../static/js/skel.min.js"></script>
 			<script src="../static/js/util.js"></script>
 			<script src="../static/js/main.js"></script>
+
+            <!-- Model Script -->
+
+            {%for dict in dictList %}
+                <script>
+                    // Get the modal
+                    var {{dict["modalID"]}} = document.getElementById("{{dict["modalID"]}}");
+                    // Get the button that opens the modal
+                    var {{dict["buttonID"]}} = document.getElementById("{{dict["buttonID"]}}");
+                    // Get the <span> element that closes the modal
+                    var {{dict["closeID"]}} = document.getElementById("{{dict["closeID"]}}");
+                    // When the user clicks the button, open the modal
+                    {{dict["buttonID"]}}.onclick = function() {
+                      {{dict["modalID"]}}.style.display = "block";
+                    }
+                    // When the user clicks on <span> (x), close the modal
+                    {{dict["closeID"]}}.onclick = function() {
+                      {{dict["modalID"]}}.style.display = "none";
+                    }
+                    // When the user clicks anywhere outside of the modal, close it
+                    window.onclick = function(event) {
+                      if (event.target == {{dict["modalID"]}}) {
+                        {{dict["modalID"]}}.style.display = "none";
+                      }
+                    }
+                </script>
+            {%endfor%}
+
+
 
 	</body>
 </html>

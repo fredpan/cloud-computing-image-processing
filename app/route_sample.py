@@ -33,11 +33,3 @@ def upload_management():
         return redirect(url_for('user_login'))
 
 
-@webapp.route('/file_management')
-def file_management():
-    if ('authenticated' in session) and ('username' in session):
-        #check if the cookie includes username and authenticated flag
-        if session['authenticated'] == True:
-            return render_template("file_management.html")
-    else:
-        return redirect(url_for('user_login'))

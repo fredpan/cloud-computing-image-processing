@@ -37,6 +37,11 @@
                 color:blue;
             }
 
+            img.show{
+                width: 100%;
+                max-width: 600px;
+            }
+
         </style>
 	</head>
 	<body>
@@ -57,7 +62,7 @@
 					<!-- Header -->
 						<header id="header" >
 							<div align="left" >
-                                <h2>{{ username }}Upload New Photo For Processing </h2>
+                                <h2>Upload New Photo For Processing </h2>
                             </div>
                             <hr/>
 						</header>
@@ -66,7 +71,6 @@
                         <div class="pad">
                             <h3 align="left">STEP①: Upload New File from Local:</h3>
                             <h4>.jpg/.png/.jpeg:</h4>
-                            <h4 style="color: red">!!!Under Construction, Don't Click!!!!!</h4>
                             <h3 class="error" >{{error_msg if error_msg != None}}</h3>
                             <!-- Trigger/Open The Modal -->
                             <button id="myBtn">Upload New Photo</button>
@@ -94,11 +98,11 @@
                             <h3 class="info" >{{info_msg if info_msg != None}}</h3>
                             <h2>Image Input==>:</h2>
                             <div class="myImg">
-                                <img src="{{ image_before }}" alt="Input Image" style="width:100%">
+                                <img class="show" src="{{ uploadImagePath }}" alt= "{{ fileName }}" style="width:100%">
                             </div>
                             <h2>Image Output==>:</h2>
                             <div class="myImg">
-                                <img src="{{ image_after }}" alt="Output Image" style="width:100%">
+                                <img class="show" src="{{ processedImagePath }}" alt= "{{ processedFileName }}" style="width:100%">
                             </div>
                         </div>
 
