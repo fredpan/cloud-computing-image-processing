@@ -119,7 +119,7 @@ def sign_up_save():
 
     if (len(username) > 20 or len(username) < 1) or not all(c in validUsernameChar for c in username):
         print(len(username))
-        error_msg = "Error: Username violation"
+        error_msg = "Error: Username violation, username must have length between 1 to 20, only letters and numbers allowed"
         return render_template("signup_index.html", title="Sign Up", error_msg=error_msg,
                                username=username, password1=password1, password2=password2)
 
