@@ -7,3 +7,6 @@ from app import route_sample
 from app import file_uploader
 from app import account_managment
 
+# set the max size of img allowed
+webapp.config['MAX_CONTENT_LENGTH'] = 1024*10
+

@@ -21,7 +21,9 @@ def get_database():
 
 
 
-UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/'
+#UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/'
+
+UPLOAD_FOLDER = '/Users/fredpan/Desktop/output/'
 
 #UPLOAD_FOLDER = '/home/yixiao/Desktop/img_database/'
 
@@ -50,6 +52,7 @@ def upload_file():
                 raise Exception("No file selected!")
             if len(file.filename) >= 20:
                 raise Exception("File name too long")
+
             if file and allowed_file(file.filename):
 
                 #===================================================#
@@ -108,6 +111,8 @@ def upload_file():
             else:
                 raise Exception("Not a Correct File Type!")
     except Exception as ex:
+        if '413' in str(ex):
+            return render_template("upload_management.html", error_msg="Image too large, file cannot larger than 10mb")
         return render_template("upload_management.html", error_msg=ex)
 
 @webapp.route('/uploads/<filename>')
