@@ -48,6 +48,8 @@ def upload_file():
             # submit an empty part without filename
             if file.filename == '':
                 raise Exception("No file selected!")
+            if len(file.filename) >= 20:
+                raise Exception("File name too long")
             if file and allowed_file(file.filename):
 
                 #===================================================#

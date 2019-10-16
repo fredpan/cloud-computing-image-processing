@@ -105,14 +105,13 @@ def sign_up_save():
         return render_template("signup_index.html", title="Sign Up", error_msg=error_msg,
                                username=username, password1=password1, password2=password2)
 
-    isValidUsername = all(c in validUsernameChar for c in username)
-
-    if (len(username)> 20 or len(username)<1 or isValidUsername):
+    if (len(username) > 20 or len(username) < 1) or not all(c in validUsernameChar for c in username):
+        print(len(username))
         error_msg = "Error: Username violation"
         return render_template("signup_index.html", title="Sign Up", error_msg=error_msg,
                                username=username, password1=password1, password2=password2)
 
-    if (len(password1)>16 or len(password1)<1):
+    if len(password1)>16 or len(password1)<1:
         error_msg = "Error: Password length violation"
         return render_template("signup_index.html", title="Sign Up", error_msg=error_msg,
                                username=username, password1=password1, password2=password2)
