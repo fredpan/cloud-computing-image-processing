@@ -36,8 +36,14 @@ def login_submit():
     bcrypt = Bcrypt(webapp)
     username = request.form['username']
     password = request.form['password']
+    remember = request.form.get('remember')
+    print(remember)
+    rememberMe = False
+    #if remember!=None and remember=="on":
+    if remember:
+        rememberMe = True
+    print(rememberMe)
     #password = bcrypt.generate_password_hash(password).decode("utf-8")
-    print(password)
     #bcrypt.check_password_hash
     # connect to database
     cnx = get_database()
@@ -51,6 +57,8 @@ def login_submit():
             session['authenticated'] = True
             session['username'] = username
             session['error'] = None
+            if rememberMe:
+                webapp.permanent_session_lifetime = datetime.timedelta(weeks=1)
             return redirect(url_for('sensitive'))
 
     session['username'] = username
@@ -143,8 +151,8 @@ Secure Index
 """
 @webapp.route('/secure/index', methods=['GET', 'POST'])
 def sensitive():
-#    if 'authenticated' not in session:
- #       return redirect(url_for('user_login'))
+    if 'authenticated' not in session:
+        return redirect(url_for('user_login'))
 
     #==========Read user Info and sign in =========#
     if session['authenticated'] == True:
@@ -163,8 +171,8 @@ def sensitive():
         session['membersince'] = memberSince
 
         return render_template("/secured_index.html", username=session['username'], membersince=session['membersince'])
-   # else:
-    return redirect(url_for('user_login'))
+    else:
+        return redirect(url_for('user_login'))
 
 @webapp.route('/logout', methods=['GET', 'POST'])
 def logout():

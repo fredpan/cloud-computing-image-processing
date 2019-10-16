@@ -108,7 +108,6 @@ def upload_file():
             else:
                 raise Exception("Not a Correct File Type!")
     except Exception as ex:
-        print(ex)
         return render_template("upload_management.html", error_msg=ex)
 
 @webapp.route('/uploads/<filename>')
