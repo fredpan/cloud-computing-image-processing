@@ -42,7 +42,9 @@ def login_submit():
     #if remember!=None and remember=="on":
     if remember:
         rememberMe = True
-    print(rememberMe)
+    else:
+        session.clear()
+        webapp.permanent_session_lifetime = datetime.timedelta(milliseconds=0)
     #password = bcrypt.generate_password_hash(password).decode("utf-8")
     #bcrypt.check_password_hash
     # connect to database
@@ -177,6 +179,7 @@ def sensitive():
 @webapp.route('/logout', methods=['GET', 'POST'])
 def logout():
     session.clear()
+    webapp.permanent_session_lifetime = datetime.timedelta(milliseconds=0)
     return redirect(url_for("sensitive"))
 
 """
