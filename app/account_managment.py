@@ -36,20 +36,22 @@ def login_submit():
     bcrypt = Bcrypt(webapp)
     username = request.form['username']
     password = request.form['password']
-    password = bcrypt.generate_password_hash(password).decode("utf-8")
+    #password = bcrypt.generate_password_hash(password).decode("utf-8")
+    print(password)
+    #bcrypt.check_password_hash
     # connect to database
     cnx = get_database()
     cursor = cnx.cursor()
-    query = "SELECT COUNT(username) FROM user_info WHERE username = %s and password = %s and active = 1"
-    cursor.execute(query, (username, password))
+    query = "SELECT password FROM user_info WHERE username = %s and active = 1"
+    cursor.execute(query, (username,))
     results = cursor.fetchall()
-    numberOfMatchedResults = results[0][0]
-
-    if numberOfMatchedResults == 1:
-        session['authenticated'] = True
-        session['username'] = username
-        session['error'] = None
-        return redirect(url_for('sensitive'))
+    if len(results)==1:
+        hashed_pwd = results[0][0]
+        if bcrypt.check_password_hash(hashed_pwd,password):
+            session['authenticated'] = True
+            session['username'] = username
+            session['error'] = None
+            return redirect(url_for('sensitive'))
 
     session['username'] = username
     session['error'] = "<=Error! Incorrect username or password!=>"
