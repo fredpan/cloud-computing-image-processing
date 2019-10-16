@@ -9,6 +9,7 @@ from app.sql.config.config import db_config
 from app import send_email as email_confirmation
 from flask_bcrypt import Bcrypt
 
+validUsernameChar = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 # The function used to establish connection to sql database
 def connect_to_database():
@@ -36,7 +37,6 @@ def login_submit():
     username = request.form['username']
     password = request.form['password']
     password = bcrypt.generate_password_hash(password).decode("utf-8")
-
     # connect to database
     cnx = get_database()
     cursor = cnx.cursor()
@@ -70,6 +70,7 @@ def user_signup():
 @webapp.route('/signup/save', methods=['POST'])
 # Create a new account and save them in the database.
 def sign_up_save():
+    bcrypt = Bcrypt(webapp)
     # need to trim the user name
     username = request.form.get('username', "")
     password1 = request.form.get('password1', "")
@@ -104,14 +105,29 @@ def sign_up_save():
         return render_template("signup_index.html", title="Sign Up", error_msg=error_msg,
                                username=username, password1=password1, password2=password2)
 
+    isValidUsername = all(c in validUsernameChar for c in username)
+
+    if (len(username)> 20 or len(username)<1 or isValidUsername):
+        error_msg = "Error: Username violation"
+        return render_template("signup_index.html", title="Sign Up", error_msg=error_msg,
+                               username=username, password1=password1, password2=password2)
+
+    if (len(password1)>16 or len(password1)<1):
+        error_msg = "Error: Password length violation"
+        return render_template("signup_index.html", title="Sign Up", error_msg=error_msg,
+                               username=username, password1=password1, password2=password2)
+
+
     ts = time.time()
     timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+
+    password = bcrypt.generate_password_hash(password1).decode("utf-8")
 
     query = ''' INSERT INTO user_info (username,password,create_date,active,upload_counter)
                        VALUES (%s,%s, %s,1,0)
     '''
 
-    cursor.execute(query, (username, password1, timestamp))
+    cursor.execute(query, (username, password, timestamp))
     cnx.commit()
 
     # Add error catch here for sql
@@ -126,8 +142,8 @@ Secure Index
 """
 @webapp.route('/secure/index', methods=['GET', 'POST'])
 def sensitive():
-    if 'authenticated' not in session:
-        return redirect(url_for('user_login'))
+#    if 'authenticated' not in session:
+ #       return redirect(url_for('user_login'))
 
     #==========Read user Info and sign in =========#
     if session['authenticated'] == True:
@@ -146,8 +162,8 @@ def sensitive():
         session['membersince'] = memberSince
 
         return render_template("/secured_index.html", username=session['username'], membersince=session['membersince'])
-    else:
-        return redirect(url_for('user_login'))
+   # else:
+    return redirect(url_for('user_login'))
 
 @webapp.route('/logout', methods=['GET', 'POST'])
 def logout():

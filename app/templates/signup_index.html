@@ -6,6 +6,15 @@
 -->
 <html>
 	<head>
+        <!-- Scripts -->
+			<script src="../static/js/jquery.min.js"></script>
+			<script src="../static/js/jquery.poptrox.min.js"></script>
+			<script src="../static/js/jquery.scrolly.min.js"></script>
+			<script src="../static/js/skel.min.js"></script>
+			<script src="../static/js/util.js"></script>
+			<script src="../static/js/main.js"></script>
+            <script src="../static/js/signup.js"></script>
+
 		<title>Sign Up</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -54,28 +63,28 @@
                                 <h3> ECE1779:Introduction to Cloud Computing Project </h3>
                                 <h3> Please Sign Up </h3>
                                 <h3 class="error" >{{error_msg if error_msg != None}}</h3>
-                                <form action='/signup/save' method='post'>
+                                <form action='/signup/save' method='post' id="register">
                                     <div align="left">
                                         <h4>Login Name</h4>
-                                        <input name='username' type='text' value='{{username if username  != None}}'>
+                                        <input required placeholder="Username must has length 1-16, and only contains A-Z, a-z, or 0-9" name='username' type='text' pattern="[A-Za-z0-9]{1,20}" value='{{username if username  != None}}'>
                                     </div>
 
                                     <div align="left">
                                         <h4>Password</h4>
-                                        <input name='password1' type='password' value='{{password1 if password1  != None}}'>
+                                        <input required placeholder="Password must has length 1-16" name='password1' type='password' minlength="1" maxlength="16" value='{{password1 if password1  != None}}'>
                                     </div>
 
                                     <div align="left">
                                         <h4>Re-enter Password</h4>
-                                        <input name='password2' type='password' value='{{password2 if password2  != None}}'>
+                                        <input required placeholder="Password must has length 1-16" name='password2' type='password' minlength="1" maxlength="16" value='{{password2 if password2  != None}}'>
                                     </div>
                                     <p></p>
                                     <div style="width: 100%; overflow: hidden;">
                                         <div style="width: 0px; float: left;">
-                                            <a href="/" class="button" type="submit">Back Home</a>
+                                            <a href="/" class="button" type="ubmit">Back Home</a>
                                         </div>
                                         <div align="right">
-                                            <input class="button" type='submit' value='Submit'>
+                                            <input id="signup_submit" class="button" type='submit' value='Submit'>
                                         </div>
                                     </div>
                                 </form>
@@ -94,13 +103,13 @@
 									<div class="content">
                                         <div class="row">
                                           <div class="column">
-                                            <img src="../static/images/thumbs/01.jpg"" alt="Snow" style="width:100%">
+                                            <img src="../static/images/thumbs/01.jpg" alt="Snow" style="width:100%">
                                           </div>
                                           <div class="column">
-                                            <img src="../static/images/thumbs/02.jpg"" alt="Forest" style="width:100%">
+                                            <img src="../static/images/thumbs/02.jpg" alt="Forest" style="width:100%">
                                           </div>
                                           <div class="column">
-                                            <img src="../static/images/thumbs/03.jpg"" alt="Mountains" style="width:100%">
+                                            <img src="../static/images/thumbs/03.jpg" alt="Mountains" style="width:100%">
                                           </div>
                                         </div>
 									</div>
@@ -120,13 +129,7 @@
 				</section>
 		</div>
 
-		<!-- Scripts -->
-			<script src="../static/js/jquery.min.js"></script>
-			<script src="../static/js/jquery.poptrox.min.js"></script>
-			<script src="../static/js/jquery.scrolly.min.js"></script>
-			<script src="../static/js/skel.min.js"></script>
-			<script src="../static/js/util.js"></script>
-			<script src="../static/js/main.js"></script>
+
 
 	</body>
 </html>
