@@ -23,11 +23,11 @@ def get_database():
 
 UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/'
 
-#UPLOAD_FOLDER = '/Users/fredpan/Desktop/output/'
+#UPLOAD_FOLDER = '/Users/fredpan/Desktop/output/src/'
 
 #UPLOAD_FOLDER = '/home/yixiao/Desktop/img_database/'
 
-#UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/' todo Chris: add addr here
+#UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/'
 
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
