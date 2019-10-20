@@ -1,6 +1,6 @@
 import os
 from app import webapp
-from flask import Flask, flash, request, redirect, url_for, send_from_directory,render_template,session,g
+from flask import request, redirect, url_for, send_from_directory,render_template,session,g
 from werkzeug.utils import secure_filename
 from app.opencv import opencv
 import mysql.connector
@@ -21,9 +21,9 @@ def get_database():
 
 
 
-UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/'
+#UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/'
 
-#UPLOAD_FOLDER = '/Users/fredpan/Desktop/output/src/'
+UPLOAD_FOLDER = '/Users/fredpan/Desktop/output/'
 
 #UPLOAD_FOLDER = '/home/yixiao/Desktop/img_database/'
 
@@ -61,6 +61,12 @@ def upload_file():
                 #======Till this step the file is good to process===#
                 # ===================================================#
 
+                file.seek(0, os.SEEK_END)
+                file_length = file.tell()
+                print(file_length)
+                if file_length>5000000:
+                    raise Exception("File too large")
+
                 # connect to database and create the record
                 cnx = get_database()
                 cursor = cnx.cursor()
@@ -81,7 +87,7 @@ def upload_file():
                 file.save(os.path.join(webapp.config['UPLOAD_FOLDER'], cloudSaveFilename))
 
                 #process the img from cloud drive, it will process the img in (img_path) and save processed img in same path
-                opencv.imageProcess(UPLOAD_FOLDER,cloudSaveFilename,cloudProcessedFileName)
+                opencv.imageProcess(UPLOAD_FOLDER, cloudSaveFilename, cloudProcessedFileName)
 
                 #prepare for values for sql
                 uid = session["uid"]
@@ -124,7 +130,7 @@ def upload_file():
         print(str(ex))
         if '413' in str(ex):
             print("===")
-            return render_template("upload_management.html", error_msg="Image too large, file cannot larger than 5mb")
+            return render_template("signup_index.html")#render_template("upload_management.html", error_msg="Image too large, file cannot larger than 5mb")
         return render_template("upload_management.html", error_msg=str(ex))
 
 @webapp.route('/uploads/<filename>')
