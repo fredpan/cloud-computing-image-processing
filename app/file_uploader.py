@@ -27,7 +27,7 @@ UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/'
 
 #UPLOAD_FOLDER = '/home/yixiao/Desktop/img_database/'
 
-#UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/' todo Chris: add addr here
+#UPLOAD_FOLDER = '/C:\UT\ECE1779\testimg/'
 
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
@@ -52,7 +52,7 @@ def upload_file():
             # submit an empty part without filename
             if file.filename == '':
                 raise Exception("No file selected!")
-            if len(file.filename) >= 20:
+            if len(file.filename) >= 50:
                 raise Exception("File name too long")
 
             if file and allowed_file(file.filename):
