@@ -2,9 +2,9 @@ import os
 import re
 import time
 import datetime
-from flask import render_template, request, session, send_from_directory, url_for
+from flask import request
 from flask_bcrypt import Bcrypt
-from werkzeug.utils import secure_filename, redirect
+from werkzeug.utils import secure_filename
 from app import webapp
 from app.account_managment import validUsernameChar, get_database
 from app.api.http_response import http_response
@@ -62,8 +62,7 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 webapp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 #after user click the upload button
 @webapp.route('/api/upload', methods=['POST'])
@@ -85,12 +84,17 @@ def upload_file123():
                 return http_response(404, "No file selected!")
             if len(file.filename) >= 20:
                 return http_response(400, "File name too long")
-
             if file and allowed_file(file.filename):
 
                 #===================================================#
                 #======Till this step the file is good to process===#
                 # ===================================================#
+
+                # file.seek(0, os.SEEK_END)
+                # file_length = file.tell()
+                # print(file_length)
+                # if file_length > 5000000:
+                #     raise http_response(400, "File too large")
 
                 #rename the upload img as: userpid_useruploadcounter_imagename.extention
                 userFileName = secure_filename(file.filename)  # example: example.jpg
@@ -116,7 +120,7 @@ def upload_file123():
                     file.save(os.path.join(webapp.config['UPLOAD_FOLDER'], cloudSaveFilename))
 
                     #process the img from cloud drive, it will process the img in (img_path) and save processed img in same path
-                    opencv.imageProcess(UPLOAD_FOLDER,cloudSaveFilename,cloudProcessedFileName)
+                    opencv.imageProcess(UPLOAD_FOLDER, cloudSaveFilename, cloudProcessedFileName)
 
                     #prepare for values for sql
                     fileName = userFileName
@@ -149,7 +153,8 @@ def upload_file123():
                     return http_response(200, "Image Successfully Processed!")
 
             else:
-                return http_response(400, "Not a Correct File Type!")
+                return http_response(400, "Not a Correct File Type!"+str(file and allowed_file(file.filename))+"|"+file.filename)
+        return http_response(123, "Unsupported method!")
 
     except Exception as ex:
         if '413' in str(ex):

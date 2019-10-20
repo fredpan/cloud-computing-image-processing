@@ -1,13 +1,12 @@
 import os
 from app import webapp
-from flask import Flask, flash, request, redirect, url_for, send_from_directory,render_template,session,g
+from flask import request, redirect, url_for, send_from_directory,render_template,session,g
 from werkzeug.utils import secure_filename
 from app.opencv import opencv
 import mysql.connector
 from app.sql.config.config import db_config
 import time
 import datetime
-
 
 # The function used to establish connection to sql database
 def connect_to_database():
@@ -24,11 +23,11 @@ def get_database():
 
 #UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/'
 
-#UPLOAD_FOLDER = '/Users/fredpan/Desktop/output/src/'
+UPLOAD_FOLDER = '/Users/fredpan/Desktop/output/'
 
 #UPLOAD_FOLDER = '/home/yixiao/Desktop/img_database/'
 
-UPLOAD_FOLDER = '/C:/UT/ECE1779/testimg/'
+#UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/'
 
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
@@ -62,6 +61,22 @@ def upload_file():
                 #======Till this step the file is good to process===#
                 # ===================================================#
 
+                file.seek(0, os.SEEK_END)
+                file_length = file.tell()
+                print(file_length)
+                if file_length>5000000:
+                    raise Exception("File too large")
+
+                # connect to database and create the record
+                cnx = get_database()
+                cursor = cnx.cursor()
+
+                #update uploadCounter in current session
+                query = "SELECT upload_counter FROM user_info WHERE uid = %s"
+                cursor.execute(query, (session['uid'],))
+                results = cursor.fetchall()
+                session["uploadCounter"] = results[0][0]
+
                 #rename the upload img as: userpid_useruploadcounter_imagename.extention
                 userFileName = secure_filename(file.filename)  # example: example.jpg
                 cloudSaveFilename = str(session["uid"]) + "_" + str(session["uploadCounter"]) + "_" + userFileName  #example: 12_1_example.jpg
@@ -72,7 +87,7 @@ def upload_file():
                 file.save(os.path.join(webapp.config['UPLOAD_FOLDER'], cloudSaveFilename))
 
                 #process the img from cloud drive, it will process the img in (img_path) and save processed img in same path
-                opencv.imageProcess(UPLOAD_FOLDER,cloudSaveFilename,cloudProcessedFileName)
+                opencv.imageProcess(UPLOAD_FOLDER, cloudSaveFilename, cloudProcessedFileName)
 
                 #prepare for values for sql
                 uid = session["uid"]
@@ -83,9 +98,7 @@ def upload_file():
                 ts = time.time()
                 timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
-                # connect to database and create the record
-                cnx = get_database()
-                cursor = cnx.cursor()
+
 
                 #update file_name table
                 query = "INSERT INTO file_info (uid, file_name, upload_image_path, cloud_image_name, processed_image_path, cloud_processed_image_name, create_time) VALUES (%s, %s, %s, %s, %s , %s, %s)"
@@ -114,9 +127,11 @@ def upload_file():
             else:
                 raise Exception("Not a Correct File Type!")
     except Exception as ex:
+        print(str(ex))
         if '413' in str(ex):
-            return render_template("upload_management.html", error_msg="Image too large, file cannot larger than 5mb")
-        return render_template("upload_management.html", error_msg=ex)
+            print("===")
+            return render_template("signup_index.html")#render_template("upload_management.html", error_msg="Image too large, file cannot larger than 5mb")
+        return render_template("upload_management.html", error_msg=str(ex))
 
 @webapp.route('/uploads/<filename>')
 def uploaded_file(filename):
