@@ -9,7 +9,7 @@ from app import account_managment
 from app.api import apis
 
 # set the max size of img allowed
-webapp.config['MAX_CONTENT_LENGTH'] = 1024*1024*10
+webapp.config['MAX_CONTENT_LENGTH'] = 1024*1024*5
 #session.permanent = True
 @webapp.before_request
 def make_session_permanent():
