@@ -113,10 +113,10 @@ def upload_file():
             else:
                 raise Exception("Not a Correct File Type!")
     except Exception as ex:
-        print("111")
+        print(str(ex))
         if '413' in str(ex):
             return render_template("upload_management.html", error_msg="Image too large, file cannot larger than 5mb")
-        return render_template("upload_management.html", error_msg=ex)
+        return render_template("upload_management.html", error_msg=str(ex))
 
 @webapp.route('/uploads/<filename>')
 def uploaded_file(filename):
