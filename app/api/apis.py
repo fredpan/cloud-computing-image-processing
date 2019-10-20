@@ -1,4 +1,3 @@
-import json
 import os
 import re
 import time
@@ -6,9 +5,9 @@ import datetime
 from flask import render_template, request, session, send_from_directory, url_for
 from flask_bcrypt import Bcrypt
 from werkzeug.utils import secure_filename, redirect
-
 from app import webapp
 from app.account_managment import validUsernameChar, get_database
+from app.api.http_response import http_response
 from app.file_uploader import UPLOAD_FOLDER
 from app.opencv import opencv
 
@@ -29,26 +28,19 @@ def user_login123():
     numberOfExistUser = results[0][0]
 
     if username == "" or password == "":
-        error_msg = {401:"Error: All fields are required!"}
-        #return "Registration failed: " + error_msg
-        return json.dump(error_msg)
+        return http_response(400, "Error: All fields are required!")
 
     if re.findall(r'\s+', username) != []:
-        error_msg = "Error: No space allowed in user name!"
-        return "Registration failed: " + error_msg
+        return http_response(400, "Error: No space allowed in user name!")
 
     if numberOfExistUser != 0:
-        error_msg = "Error: User name already exist!"
-        return "Registration failed: " + error_msg
+        return http_response(409, "Error: User name already exist!")
 
     if (len(username) > 20 or len(username) < 1) or not all(c in validUsernameChar for c in username):
-        print(len(username))
-        error_msg = "Error: Username violation, username must have length between 1 to 20, only letters and numbers allowed"
-        return "Registration failed: " + error_msg
+        return http_response(400, "Error: Username violation, username must have length between 1 to 20, only letters and numbers allowed")
 
     if len(password) > 16 or len(password) < 1:
-        error_msg = "Error: Password length violation"
-        return "Registration failed: " + error_msg
+        return http_response(400, "Error: Password length violation")
 
     ts = time.time()
     timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
@@ -64,7 +56,7 @@ def user_login123():
 
     # Add error catch here for sql
 
-    return "Succeed"
+    return http_response(200, "Registration succeed for the user: " + username)
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 webapp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -85,15 +77,14 @@ def upload_file123():
         if request.method == 'POST':
             # check if the post request has the file part
             if 'file' not in request.files:
-                print(request)
-                raise Exception("No file upload in the request!")
+                return http_response(404, "No file upload in the request!")
             file = request.files['file']
             # if user does not select file, browser also
             # submit an empty part without filename
             if file.filename == '':
-                raise Exception("No file selected!")
+                return http_response(404, "No file selected!")
             if len(file.filename) >= 20:
-                raise Exception("File name too long")
+                return http_response(400, "File name too long")
 
             if file and allowed_file(file.filename):
 
@@ -111,7 +102,7 @@ def upload_file123():
                 cursor.execute(query, (username,))
                 results = cursor.fetchall()
                 if len(results)!=1:
-                    raise Exception("Invalid username")
+                    return http_response(400, "Invalid username")
                 correctPwd = bcrypt.check_password_hash(results[0][0], password)
                 if correctPwd:
                     uid = results[0][1]
@@ -155,14 +146,12 @@ def upload_file123():
                     results = cursor.fetchall()
 
                     # get the image path for both image_before and image_after
-                    info_msg = [{"Success":"Image Successfully Processed!"}]
-
-                    return json.dumps(info_msg)
+                    return http_response(200, "Image Successfully Processed!")
 
             else:
-                raise Exception("Not a Correct File Type!")
+                return http_response(400, "Not a Correct File Type!")
 
     except Exception as ex:
         if '413' in str(ex):
-            return "Image too large, file cannot larger than 10mb"
-        return str(ex)
+            return http_response(413, "Image too large, file cannot larger than 10mb")
+        return http_response(400, str(ex))
