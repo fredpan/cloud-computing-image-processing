@@ -33,6 +33,7 @@ def user_login():
 
 @webapp.route('/login_submit', methods=['POST'])
 def login_submit():
+    session.permanent = True
     bcrypt = Bcrypt(webapp)
     username = request.form['username']
     password = request.form['password']
