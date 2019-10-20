@@ -61,6 +61,16 @@ def upload_file():
                 #======Till this step the file is good to process===#
                 # ===================================================#
 
+                # connect to database and create the record
+                cnx = get_database()
+                cursor = cnx.cursor()
+
+                #update uploadCounter in current session
+                query = "SELECT upload_counter FROM user_info WHERE uid = %s"
+                cursor.execute(query, (session['uid'],))
+                results = cursor.fetchall()
+                session["uploadCounter"] = results[0][0]
+
                 #rename the upload img as: userpid_useruploadcounter_imagename.extention
                 userFileName = secure_filename(file.filename)  # example: example.jpg
                 cloudSaveFilename = str(session["uid"]) + "_" + str(session["uploadCounter"]) + "_" + userFileName  #example: 12_1_example.jpg
@@ -82,9 +92,7 @@ def upload_file():
                 ts = time.time()
                 timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
-                # connect to database and create the record
-                cnx = get_database()
-                cursor = cnx.cursor()
+
 
                 #update file_name table
                 query = "INSERT INTO file_info (uid, file_name, upload_image_path, cloud_image_name, processed_image_path, cloud_processed_image_name, create_time) VALUES (%s, %s, %s, %s, %s , %s, %s)"
