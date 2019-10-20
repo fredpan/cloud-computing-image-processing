@@ -8,6 +8,7 @@ from app.sql.config.config import db_config
 import time
 import datetime
 
+
 # The function used to establish connection to sql database
 def connect_to_database():
     return mysql.connector.connect(user=db_config['user'],password=db_config['password'],host=db_config['host'],database=db_config['database'])
@@ -21,13 +22,13 @@ def get_database():
 
 
 
-UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/'
+#UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/'
 
 #UPLOAD_FOLDER = '/Users/fredpan/Desktop/output/src/'
 
 #UPLOAD_FOLDER = '/home/yixiao/Desktop/img_database/'
 
-#UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/'
+UPLOAD_FOLDER = '/C:/UT/ECE1779/testimg/'
 
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
@@ -113,7 +114,6 @@ def upload_file():
             else:
                 raise Exception("Not a Correct File Type!")
     except Exception as ex:
-        print("111")
         if '413' in str(ex):
             return render_template("upload_management.html", error_msg="Image too large, file cannot larger than 5mb")
         return render_template("upload_management.html", error_msg=ex)
