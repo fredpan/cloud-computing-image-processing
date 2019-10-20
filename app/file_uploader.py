@@ -115,6 +115,7 @@ def upload_file():
     except Exception as ex:
         print(str(ex))
         if '413' in str(ex):
+            print("===")
             return render_template("upload_management.html", error_msg="Image too large, file cannot larger than 5mb")
         return render_template("upload_management.html", error_msg=str(ex))
 
