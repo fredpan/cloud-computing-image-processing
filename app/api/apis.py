@@ -2,9 +2,9 @@ import os
 import re
 import time
 import datetime
-from flask import render_template, request, session, send_from_directory, url_for
+from flask import request
 from flask_bcrypt import Bcrypt
-from werkzeug.utils import secure_filename, redirect
+from werkzeug.utils import secure_filename
 from app import webapp
 from app.account_managment import validUsernameChar, get_database
 from app.api.http_response import http_response
@@ -116,7 +116,7 @@ def upload_file123():
                     file.save(os.path.join(webapp.config['UPLOAD_FOLDER'], cloudSaveFilename))
 
                     #process the img from cloud drive, it will process the img in (img_path) and save processed img in same path
-                    opencv.imageProcess(UPLOAD_FOLDER,cloudSaveFilename,cloudProcessedFileName)
+                    opencv.imageProcess(UPLOAD_FOLDER, cloudSaveFilename, cloudProcessedFileName)
 
                     #prepare for values for sql
                     fileName = userFileName
