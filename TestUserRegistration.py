@@ -49,11 +49,49 @@ async def load_gen():
     responses = {}
     requests = {'i': 0}
     asyncio.create_task(status_printer(requests, responses))
-    for var in range(1000):
+
+    upload_task = upload_file("http://localhost:5000/api/register", "admin", "admin", responses)
+    asyncio.create_task(upload_task)
+    requests['i'] += 1
+    await asyncio.sleep(1.0 / 20)
+
+    upload_task = upload_file("http://localhost:5000/api/register", "test1", "", responses)
+    asyncio.create_task(upload_task)
+    requests['i'] += 1
+    await asyncio.sleep(1.0 / 20)
+
+    upload_task = upload_file("http://localhost:5000/api/register", "", "123", responses)
+    asyncio.create_task(upload_task)
+    requests['i'] += 1
+    await asyncio.sleep(1.0 / 20)
+
+    upload_task = upload_file("http://localhost:5000/api/register", "test3   ", "123", responses)
+    asyncio.create_task(upload_task)
+    requests['i'] += 1
+    await asyncio.sleep(1.0 / 20)
+
+    upload_task = upload_file("http://localhost:5000/api/register", "    ", "123", responses)
+    asyncio.create_task(upload_task)
+    requests['i'] += 1
+    await asyncio.sleep(1.0 / 20)
+
+    upload_task = upload_file("http://localhost:5000/api/register", "test1", "123", responses)
+    asyncio.create_task(upload_task)
+    requests['i'] += 1
+    await asyncio.sleep(1.0 / 20)
+
+    upload_task = upload_file("http://localhost:5000/api/register", "test1", "123", responses)
+    asyncio.create_task(upload_task)
+    requests['i'] += 1
+    await asyncio.sleep(1.0 / 20)
+
+    for var in range(100):
         upload_task = upload_file("http://localhost:5000/api/register", "handsomeFredkk" + str(var), "fakedPWD", responses)
         asyncio.create_task(upload_task)
         requests['i'] += 1
         await asyncio.sleep(1.0/20)
+
+
 
 
 if __name__ == "__main__":

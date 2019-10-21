@@ -30,6 +30,10 @@ Login Settings
 
 @webapp.route('/login', methods=['GET', 'POST'])
 def user_login():
+    '''
+
+    :return:
+    '''
     return render_template("/login_index.html", title="Welcome")
 
 @webapp.route('/login_submit', methods=['POST'])

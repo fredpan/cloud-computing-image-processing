@@ -15,6 +15,13 @@ from imutils.object_detection import non_max_suppression
 
 
 def imageProcess(folderPath, imgName, saveImgName):
+    '''
+
+    :param folderPath:
+    :param imgName:
+    :param saveImgName:
+    :return:
+    '''
     image = cv2.imread(folderPath + imgName)
     originalImgCopy = image.copy()
     (H, W) = image.shape[:2]

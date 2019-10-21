@@ -16,7 +16,7 @@ from app.opencv import Opencv
 
 
 @webapp.route('/api/register', methods=['POST'])
-def user_login():
+def user_login_api():
     bcrypt = Bcrypt(webapp)
     # need to trim the user name
     username = request.form.get('username', "")
@@ -69,7 +69,7 @@ def allowed_file(filename):
 
 #after user click the upload button
 @webapp.route('/api/upload', methods=['POST'])
-def upload_file123():
+def upload_file_api():
     bcrypt = Bcrypt(webapp)
     try:
 
