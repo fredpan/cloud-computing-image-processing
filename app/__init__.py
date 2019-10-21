@@ -11,6 +11,9 @@ from app.api import apis
 
 # set the max size of img allowed
 webapp.config['MAX_CONTENT_LENGTH'] = 1024*1024*5
+# @webapp.errorhandler(413)
+# def abc(err):
+#     return 'Oh, shit', 413
 #session.permanent = True
 @webapp.before_request
 def make_session_permanent():
