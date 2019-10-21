@@ -4,7 +4,7 @@ import time
 import mysql.connector
 from flask import render_template, redirect, url_for, request, g, session, Flask
 from app import webapp
-from app.route_sample import go_to_main_page
+from app.route_mapper import go_to_main_page
 from app.sql.config.config import db_config
 from app import send_email as email_confirmation
 from flask_bcrypt import Bcrypt
