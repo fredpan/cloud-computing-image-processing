@@ -16,7 +16,7 @@ from app.opencv import Opencv
 
 
 @webapp.route('/api/register', methods=['POST'])
-def user_login123():
+def user_login():
     bcrypt = Bcrypt(webapp)
     # need to trim the user name
     username = request.form.get('username', "")
