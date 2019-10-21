@@ -90,14 +90,30 @@ Sign up Settings
 ############################################################
 """
 
-@webapp.route('/signup', methods=['GET'])
 # Display an empty HTML form that allows users to fill the info and sign up.
+@webapp.route('/signup', methods=['GET'])
 def user_signup():
+    '''
+    This function takes GET http request with URL of "/signup"
+    It returns the user with an html website of the signup page
+    :return: the rendered "signup_index.html"
+    '''
     return render_template("signup_index.html", title="Join Us!")
 
-@webapp.route('/signup/save', methods=['POST'])
 # Create a new account and save them in the database.
+@webapp.route('/signup/save', methods=['POST'])
 def sign_up_save():
+    '''
+    This function takes POST http request with a URL of "/signup/save". It firstly reads the user submitted username,
+    password1 and password2. It then connects to the database to check if there is already an existing username in the
+    database. The function also checks whether the user provided all the necessary information; whether the format of
+    the username and password are correct and whether the two passwords match. If any of the above condition failed,
+    the function will return user with "signup_index.html" with error message. If not, the function will insert the
+    user provided information to the database and return "signup_succeed_index.html" page to user indicating the user
+    has successfully created a new account.
+    :return: "signup_index.html"  or "signup_succeed_index.html"
+    '''
+
     bcrypt = Bcrypt(webapp)
     # need to trim the user name
     username = request.form.get('username', "")
@@ -169,6 +185,11 @@ Secure Index
 """
 @webapp.route('/secure/index', methods=['GET', 'POST'])
 def sensitive():
+    '''
+
+    :return:
+    '''
+
     if 'authenticated' not in session:
         return redirect(url_for('user_login'))
 
