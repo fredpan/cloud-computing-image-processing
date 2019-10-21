@@ -2,12 +2,10 @@ import datetime
 import os
 import re
 import time
-
 from flask import request
 from flask_bcrypt import Bcrypt
 from werkzeug.exceptions import RequestEntityTooLarge
 from werkzeug.utils import secure_filename
-
 from app import webapp
 from app.AccountManagment import validUsernameChar, get_database
 from app.FileUploader import UPLOAD_FOLDER
@@ -16,7 +14,18 @@ from app.opencv import Opencv
 
 
 @webapp.route('/api/register', methods=['POST'])
-def user_login_api():
+def user_register_api():
+    '''
+    This function takes POST http request with a URL of "/api/register". It firstly reads the user submitted username
+    and password. It then connects to the database to check if there is already an existing username in the database.
+    The function also checks whether the user provided all the necessary information; whether the format of the
+    username and password are correct. If any of the above conditions failed, the function will return user with a
+    formatted Json string including the error code and error message. If all the condition check passed, the function
+    will create a new entry in the dataset and return a Json string with code 200 indicating request processed
+    successfully.
+    :return: Json string with status code and information string
+    '''
+
     bcrypt = Bcrypt(webapp)
     # need to trim the user name
     username = request.form.get('username', "")
@@ -70,9 +79,21 @@ def allowed_file(filename):
 #after user click the upload button
 @webapp.route('/api/upload', methods=['POST'])
 def upload_file_api():
+    '''
+    This function provides users with an api to upload an image together with given username and password.
+    The function will first check if the user info is correct and if it's correct, the function will keep a record
+    of the image and an OpenCV-processed image in the database, with the proper naming scheme.
+   The function can raise exceptions if there are any of the following problems: no file selected; filename too long;
+   wrong extension type; file too large.
+   If the uploaded is valid then we will connect to the database and create a record. First, we assign systematic names
+   to the image and its processed image depending on the user id and their upload counter. Second, we save the image
+   to the cloud, process it through OpenCV and then save the processed image to the cloud. Third, we gather all
+   information and update our file name table in the database.
+   Last we increase the upload counter by 1 and update it.
+    :return: Json string with status code and information string
+    '''
     bcrypt = Bcrypt(webapp)
     try:
-
         username = request.form['username']
         password = request.form['password']
 

@@ -16,7 +16,7 @@ def go_to_main_page():
     above, the user will then be directed to login page and authenticated and username information in session will be
     cleared.
 
-    :return:
+    :return: login_index.html or secured_index.html
     '''
     #Check if illigiable to goto secured index
     if ('authenticated' in session) and ('username' in session):
@@ -47,7 +47,7 @@ def upload_management():
     Otherwise the user will then be directed to login page and authenticated and username information in session will
     be cleared.
 
-    :return:
+    :return: upload_management.html or login_index.html
     '''
     if ('authenticated' in session) and ('username' in session):
         #check if the cookie includes username and authenticated flag

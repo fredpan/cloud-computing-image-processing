@@ -18,9 +18,8 @@ def connect_to_database():
 def get_database():
     '''
     Description:
-
     These two functions allow us to connect to database and get basic information
-    :return:
+    :return: connected database object
     '''
     db = getattr(g, '_database', None)
     if db is None:
@@ -45,10 +44,9 @@ webapp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def allowed_file(filename):
     '''
     Description:
-
     This function checks allowed extension type.
-    :param filename:
-    :return:
+    :param filename: The file name which need to be judged
+    :return: True if the file is illegible and False if its not
     '''
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -69,7 +67,7 @@ def upload_file():
     the user id and their upload counter. Third, we save the image to the cloud, process it through OpenCV and then
     save the processed image to the cloud. Fourth, we gather all information and update our file name table in the
     database. Last we increase the upload counter by 1 and update it.
-    :return:
+    :return: upload_management.html
     '''
 
     try:
@@ -173,7 +171,7 @@ def file_management():
     This function allows user to check uploaded and processed images when the url'/file_management' is called.
     If the session information is all valid, we will connect to the database and try to get all images with the
     required uid and then show them.
-    :return:
+    :return: "file_management.html"
     '''
     if ('authenticated' in session) and ('username' in session):
         #check if the cookie includes username and authenticated flag
