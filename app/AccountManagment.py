@@ -1,13 +1,14 @@
 import datetime
 import re
 import time
+
 import mysql.connector
-from flask import render_template, redirect, url_for, request, g, session, Flask
-from app import webapp
-from app.route_mapper import go_to_main_page
-from app.sql.config.config import db_config
-from app import send_email as email_confirmation
+from flask import render_template, redirect, url_for, request, g, session
 from flask_bcrypt import Bcrypt
+
+from app import EmailSender as email_confirmation
+from app import webapp
+from app.sql.config.DbConfig import db_config
 
 validUsernameChar = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 

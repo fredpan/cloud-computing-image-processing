@@ -1,6 +1,9 @@
-from flask import Flask
-from flask import render_template,session,redirect,url_for
+from flask import render_template, session, redirect, url_for
 from app import webapp
+from flask import render_template, session, redirect, url_for
+
+from app import webapp
+
 
 @webapp.route('/')
 def go_to_main_page():

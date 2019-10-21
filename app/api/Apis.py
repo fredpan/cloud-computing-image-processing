@@ -1,17 +1,18 @@
+import datetime
 import os
 import re
 import time
-import datetime
+
 from flask import request
 from flask_bcrypt import Bcrypt
-from werkzeug.utils import secure_filename
-from app import webapp
-from app.account_managment import validUsernameChar, get_database
-from app.api.http_response import http_response
-from app.file_uploader import UPLOAD_FOLDER
-from app.opencv import opencv
 from werkzeug.exceptions import RequestEntityTooLarge
+from werkzeug.utils import secure_filename
 
+from app import webapp
+from app.AccountManagment import validUsernameChar, get_database
+from app.FileUploader import UPLOAD_FOLDER
+from app.api.HttpResponse import http_response
+from app.opencv import Opencv
 
 
 @webapp.route('/api/register', methods=['POST'])
@@ -125,7 +126,7 @@ def upload_file123():
                     file.save(os.path.join(webapp.config['UPLOAD_FOLDER'], cloudSaveFilename))
 
                     #process the img from cloud drive, it will process the img in (img_path) and save processed img in same path
-                    opencv.imageProcess(UPLOAD_FOLDER, cloudSaveFilename, cloudProcessedFileName)
+                    Opencv.imageProcess(UPLOAD_FOLDER, cloudSaveFilename, cloudProcessedFileName)
 
                     #prepare for values for sql
                     fileName = userFileName

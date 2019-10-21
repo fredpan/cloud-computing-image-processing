@@ -2,11 +2,9 @@
 
 import argparse
 import asyncio
-from os import path, listdir
 
-import aiofiles
-from aiohttp import ClientSession, MultipartWriter, ClientConnectionError, ClientPayloadError, ClientResponseError, FormData
-
+from aiohttp import ClientSession, MultipartWriter, ClientConnectionError, ClientPayloadError, ClientResponseError, \
+    FormData
 
 
 async def upload_file(url, username, password, responses):
