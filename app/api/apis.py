@@ -10,6 +10,8 @@ from app.account_managment import validUsernameChar, get_database
 from app.api.http_response import http_response
 from app.file_uploader import UPLOAD_FOLDER
 from app.opencv import opencv
+from werkzeug.exceptions import RequestEntityTooLarge
+
 
 
 @webapp.route('/api/register', methods=['POST'])
@@ -77,12 +79,18 @@ def upload_file123():
             # check if the post request has the file part
             if 'file' not in request.files:
                 return http_response(404, "No file upload in the request!")
-            file = request.files['file']
+
+            #test if file too large:
+            try:
+                file = request.files['file']
+            except RequestEntityTooLarge:
+                return http_response(413, "Image too large, file cannot larger than 5mb")
+
             # if user does not select file, browser also
             # submit an empty part without filename
             if file.filename == '':
                 return http_response(404, "No file selected!")
-            if len(file.filename) >= 20:
+            if len(file.filename) >= 50:
                 return http_response(400, "File name too long")
             if file and allowed_file(file.filename):
 
@@ -90,25 +98,22 @@ def upload_file123():
                 #======Till this step the file is good to process===#
                 # ===================================================#
 
-                # file.seek(0, os.SEEK_END)
-                # file_length = file.tell()
-                # print(file_length)
-                # if file_length > 5000000:
-                #     raise http_response(400, "File too large")
-
                 #rename the upload img as: userpid_useruploadcounter_imagename.extention
                 userFileName = secure_filename(file.filename)  # example: example.jpg
 
                 # connect to database
                 cnx = get_database()
                 cursor = cnx.cursor()
-                query = "SELECT password, uid, upload_counter FROM user_info WHERE username = %s and active = 1"
-                cursor.execute(query, (username,))
+                query1 = "SELECT password, uid, upload_counter FROM user_info WHERE username = %s and active = 1"
+                cursor.execute(query1, (username,))
                 results = cursor.fetchall()
+
                 if len(results)!=1:
-                    return http_response(400, "Invalid username")
+                    return http_response(400, "Invalid username or password")
+
                 correctPwd = bcrypt.check_password_hash(results[0][0], password)
                 if correctPwd:
+
                     uid = results[0][1]
                     upload_counter = results[0][2]
 
@@ -130,27 +135,29 @@ def upload_file123():
                     ts = time.time()
                     timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
-                    # connect to database and create the record
-                    cnx = get_database()
-                    cursor = cnx.cursor()
                     #update file_name table
-                    query = "INSERT INTO file_info (uid, file_name, upload_image_path, cloud_image_name, processed_image_path, cloud_processed_image_name, create_time) VALUES (%s, %s, %s, %s, %s , %s, %s)"
+                    query2 = "INSERT INTO file_info (uid, file_name, upload_image_path, cloud_image_name, processed_image_path, cloud_processed_image_name, create_time) VALUES (%s, %s, %s, %s, %s , %s, %s)"
                     data = (uid,fileName,uploadImagePath,cloudSaveFilename, processedImagePath,cloudProcessedFileName, timeStamp)
-                    cursor.execute(query, data)
+                    cursor.execute(query2, data)
                     cnx.commit()
+
+                    #get the newest user upload counter for database
+                    query3 = "SELECT upload_counter FROM user_info WHERE username = %s and active = 1"
+                    cursor.execute(query3, (username,))
+                    results = cursor.fetchall()
+                    upload_counter = results[0][0]
 
                     #update user_table
-                    query = "UPDATE user_info SET upload_counter = %s WHERE uid = %s"
-                    cursor.execute(query, (upload_counter+1, uid))
+                    query4 = "UPDATE user_info SET upload_counter = %s WHERE uid = %s"
+                    cursor.execute(query4, (upload_counter+1, uid))
                     cnx.commit()
 
-                    #update uploadCounter in current session
-                    query = "SELECT upload_counter FROM user_info WHERE uid = %s"
-                    cursor.execute(query, (uid,))
-                    results = cursor.fetchall()
-
+                    print("==>process succeed")
                     # get the image path for both image_before and image_after
                     return http_response(200, "Image Successfully Processed!")
+
+                else:
+                    return http_response(400, "Invalid username or password")
 
             else:
                 return http_response(400, "Not a Correct File Type!"+str(file and allowed_file(file.filename))+"|"+file.filename)
@@ -158,5 +165,5 @@ def upload_file123():
 
     except Exception as ex:
         if '413' in str(ex):
-            return http_response(413, "Image too large, file cannot larger than 10mb")
+            return http_response(413, "Image too large, file cannot larger than 5mb")
         return http_response(400, str(ex))

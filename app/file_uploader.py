@@ -7,6 +7,7 @@ import mysql.connector
 from app.sql.config.config import db_config
 import time
 import datetime
+from werkzeug.exceptions import RequestEntityTooLarge
 
 # The function used to establish connection to sql database
 def connect_to_database():
@@ -23,9 +24,9 @@ def get_database():
 
 #UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/'
 
-UPLOAD_FOLDER = '/Users/fredpan/Desktop/output/'
+#UPLOAD_FOLDER = '/Users/fredpan/Desktop/output/'
 
-#UPLOAD_FOLDER = '/home/yixiao/Desktop/img_database/'
+UPLOAD_FOLDER = '/home/yixiao/Desktop/after/'
 
 #UPLOAD_FOLDER = '/home/ubuntu/ece1779_projects/img/'
 
@@ -40,15 +41,21 @@ def allowed_file(filename):
 #after user click the upload button
 @webapp.route('/upload', methods=['POST'])
 def upload_file():
-
     try:
-
         if request.method == 'POST':
+            try:
+                file = request.files['file']
+            except RequestEntityTooLarge:
+                return render_template("upload_management.html", error_msg="Image too large, file cannot larger than 5mb")
+
             # check if the post request has the file part
             if 'file' not in request.files:
                 raise Exception("No file upload in the request!")
-            file = request.files['file']
+
+            # test if file too large:
+
             # if user does not select file, browser also
+
             # submit an empty part without filename
             if file.filename == '':
                 raise Exception("No file selected!")
@@ -60,12 +67,6 @@ def upload_file():
                 #===================================================#
                 #======Till this step the file is good to process===#
                 # ===================================================#
-
-                file.seek(0, os.SEEK_END)
-                file_length = file.tell()
-                print(file_length)
-                if file_length>5000000:
-                    raise Exception("File too large")
 
                 # connect to database and create the record
                 cnx = get_database()
@@ -98,13 +99,17 @@ def upload_file():
                 ts = time.time()
                 timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
-
-
                 #update file_name table
                 query = "INSERT INTO file_info (uid, file_name, upload_image_path, cloud_image_name, processed_image_path, cloud_processed_image_name, create_time) VALUES (%s, %s, %s, %s, %s , %s, %s)"
                 data = (uid,fileName,uploadImagePath,cloudSaveFilename, processedImagePath,cloudProcessedFileName, timeStamp)
                 cursor.execute(query, data)
                 cnx.commit()
+
+                #update uploadCounter in current session
+                query = "SELECT upload_counter FROM user_info WHERE uid = %s"
+                cursor.execute(query, (session['uid'],))
+                results = cursor.fetchall()
+                session["uploadCounter"] = results[0][0]
 
                 #update user_table
                 query = "UPDATE user_info SET upload_counter = %s WHERE uid = %s"
@@ -127,10 +132,6 @@ def upload_file():
             else:
                 raise Exception("Not a Correct File Type!")
     except Exception as ex:
-        print(str(ex))
-        if '413' in str(ex):
-            print("===")
-            return render_template("signup_index.html")#render_template("upload_management.html", error_msg="Image too large, file cannot larger than 5mb")
         return render_template("upload_management.html", error_msg=str(ex))
 
 @webapp.route('/uploads/<filename>')
