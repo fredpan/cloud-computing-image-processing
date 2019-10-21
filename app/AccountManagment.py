@@ -46,17 +46,10 @@ def login_submit():
     webapp.permanent_session_lifetime
     The function then connects to the database and reads the search results based on user inputs
     If no search results find based on the user provided username, the function will return the user with
-    "login_index.html" with error message; if the user input password dosen't match the database password after bcrypt,
+    "login_index.html" with error message; if the user input password doesn't match the database password after bcrypt,
     the function will return the user with login_index.html" with error message; If
     :return:
 
-    Input:
-
-    XXX
-
-    Output
-    
-    YYY
     '''
     session.permanent = True
     bcrypt = Bcrypt(webapp)
