@@ -186,8 +186,13 @@ Secure Index
 @webapp.route('/secure/index', methods=['GET', 'POST'])
 def sensitive():
     '''
-
-    :return:
+    This function takes GET/POST http request with URL of "/secure/index". The function firstly check if the user
+    session has key of “authenticated” and value of True which indicating the user has passed the security check.
+    If not, the user will be redirected back  to ‘/user_login’. If the user session contains “authenticated” and
+    has a value of True, the function will perform a database search based on the “username” in the client’s
+    session and store the user’s uid, upload_counter and create_date into the session and return the page
+    of "/secured_index.html".
+    :return: "/secure/index" or  "/secured_index.html"
     '''
 
     if 'authenticated' not in session:
@@ -215,6 +220,12 @@ def sensitive():
 
 @webapp.route('/logout', methods=['GET', 'POST'])
 def logout():
+    '''
+    This function takes GET/POST http request with URL of “/logout”. The function clear all the contents in the
+    current user’s session and terminate the user’s session’s lifetime. The function then redirect the user to
+    the main page.
+    :return: /secure/index
+    '''
     session.clear()
     webapp.permanent_session_lifetime = datetime.timedelta(milliseconds=0)
     return redirect(url_for("sensitive"))
@@ -225,9 +236,20 @@ Send Email
 ############################################################
 """
 
-@webapp.route('/signup/send_email', methods=['POST'])
 # Create a new account and save them in the database.
+@webapp.route('/signup/send_email', methods=['POST'])
 def send_email():
+    '''
+    This function takes POST http request with URL of “/signup/send_email”. The function read the user email,
+    username and password and  check if the user email is in correct form with Regex, if the email address is correct,
+    it will call “send_email” function in “EmailSender” class which can send an email to the user with registered
+    username and password and redirect the user back to “signup_succeed_index.html” with success message. If the user
+    provided email address is not a correct form, the function will redirect back to “signup_succeed_index.html” with
+    error message.
+    :return: “signup_succeed_index.html”
+
+    '''
+
     # need to trim the user name
     email = request.form.get('email', "")
     username = request.form.get('username', "")
