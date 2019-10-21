@@ -45,9 +45,8 @@ def login_submit():
     The function then connects to the database and reads the search results based on user inputs
     If no search results find based on the user provided username, the function will return the user with
     "login_index.html" with error message; if the user input password dosen't match the database password after bcrypt,
-    the function will return the user with login_index.html" with error message; If it passed all the condition, the function
-    will redirect to URL"/secure/index"
-    :return: /login_index.html or /secure/index
+    the function will return the user with login_index.html" with error message; If
+    :return:
     '''
     session.permanent = True
     bcrypt = Bcrypt(webapp)
