@@ -30,7 +30,10 @@ def imageProcess(folderPath, imgName, saveImgName):
         "feature_fusion/concat_3"]
 
     print("[INFO] loading EAST text detector...")
-    net = cv2.dnn.readNet("app/opencv/frozen_east_text_detection.pb")
+    net = cv2.dnn.readNet("/var/lib/jenkins/workspace/ece1779-image-processing/app/opencv/frozen_east_text_detection.pb")
+
+    #server should use below address:
+    #"/var/lib/jenkins/workspace/ece1779-image-processing/app/opencv/frozen_east_text_detection.pb"
 
     blob = cv2.dnn.blobFromImage(image, 1.0, (W, H),
                                  (123.68, 116.78, 103.94), swapRB=True, crop=False)
