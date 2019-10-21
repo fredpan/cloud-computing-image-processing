@@ -1,13 +1,15 @@
-import os
-from app import webapp
-from flask import request, redirect, url_for, send_from_directory,render_template,session,g
-from werkzeug.utils import secure_filename
-from app.opencv import opencv
-import mysql.connector
-from app.sql.config.config import db_config
-import time
 import datetime
-from werkzeug.exceptions import RequestEntityTooLarge
+import os
+import time
+
+import mysql.connector
+from flask import request, redirect, url_for, send_from_directory, render_template, session, g
+from werkzeug.utils import secure_filename
+
+from app import webapp
+from app.opencv import Opencv
+from app.sql.config.DbConfig import db_config
+
 
 # The function used to establish connection to sql database
 def connect_to_database():
@@ -89,7 +91,7 @@ def upload_file():
                 file.save(os.path.join(webapp.config['UPLOAD_FOLDER'], cloudSaveFilename))
 
                 #process the img from cloud drive, it will process the img in (img_path) and save processed img in same path
-                opencv.imageProcess(UPLOAD_FOLDER, cloudSaveFilename, cloudProcessedFileName)
+                Opencv.imageProcess(UPLOAD_FOLDER, cloudSaveFilename, cloudProcessedFileName)
 
                 #prepare for values for sql
                 uid = session["uid"]

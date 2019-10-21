@@ -1,21 +1,22 @@
+import datetime
 import os
 import re
 import time
-import datetime
+
 from flask import request
 from flask_bcrypt import Bcrypt
-from werkzeug.utils import secure_filename
-from app import webapp
-from app.account_managment import validUsernameChar, get_database
-from app.api.http_response import http_response
-from app.file_uploader import UPLOAD_FOLDER
-from app.opencv import opencv
 from werkzeug.exceptions import RequestEntityTooLarge
+from werkzeug.utils import secure_filename
 
+from app import webapp
+from app.AccountManagment import validUsernameChar, get_database
+from app.FileUploader import UPLOAD_FOLDER
+from app.api.HttpResponse import http_response
+from app.opencv import Opencv
 
 
 @webapp.route('/api/register', methods=['POST'])
-def user_login123():
+def user_login_api():
     bcrypt = Bcrypt(webapp)
     # need to trim the user name
     username = request.form.get('username', "")
@@ -29,14 +30,14 @@ def user_login123():
     results = cursor.fetchall()
     numberOfExistUser = results[0][0]
 
+    if numberOfExistUser != 0:
+        return http_response(409, "Error: User name already exist!")
+
     if username == "" or password == "":
         return http_response(400, "Error: All fields are required!")
 
     if re.findall(r'\s+', username) != []:
         return http_response(400, "Error: No space allowed in user name!")
-
-    if numberOfExistUser != 0:
-        return http_response(409, "Error: User name already exist!")
 
     if (len(username) > 20 or len(username) < 1) or not all(c in validUsernameChar for c in username):
         return http_response(400, "Error: Username violation, username must have length between 1 to 20, only letters and numbers allowed")
@@ -68,7 +69,7 @@ def allowed_file(filename):
 
 #after user click the upload button
 @webapp.route('/api/upload', methods=['POST'])
-def upload_file123():
+def upload_file_api():
     bcrypt = Bcrypt(webapp)
     try:
 
@@ -125,7 +126,7 @@ def upload_file123():
                     file.save(os.path.join(webapp.config['UPLOAD_FOLDER'], cloudSaveFilename))
 
                     #process the img from cloud drive, it will process the img in (img_path) and save processed img in same path
-                    opencv.imageProcess(UPLOAD_FOLDER, cloudSaveFilename, cloudProcessedFileName)
+                    Opencv.imageProcess(UPLOAD_FOLDER, cloudSaveFilename, cloudProcessedFileName)
 
                     #prepare for values for sql
                     fileName = userFileName
