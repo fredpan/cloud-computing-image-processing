@@ -16,6 +16,12 @@ def connect_to_database():
     return mysql.connector.connect(user=db_config['user'],password=db_config['password'],host=db_config['host'],database=db_config['database'])
 
 def get_database():
+    '''
+    Description:
+
+    These two functions allow us to connect to database and get basic information
+    :return:
+    '''
     db = getattr(g, '_database', None)
     if db is None:
         db = g._database = connect_to_database()
@@ -37,20 +43,38 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 webapp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
+    '''
+    Description:
+
+    This function checks allowed extension type.
+    :param filename:
+    :return:
+    '''
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 #after user click the upload button
 @webapp.route('/upload', methods=['POST'])
 def upload_file():
+    '''
+    Description:
+
+    This function will be called if the user tries to upload an image and this function checks if the upload is valid.
+    If so the function will keep a copy of the image and an OpenCV-processed image in the database, with the proper
+    naming scheme.
+    The function can raise exceptions if there are any of the following problems: no file selected; filename too long;
+    wrong extension type; file too large.
+    If the uploaded is valid then we will connect to the database and create a record. First, we update the information
+    in session from our database. Second, we assign systematic names to the image and its processed image depending on
+    the user id and their upload counter. Third, we save the image to the cloud, process it through OpenCV and then
+    save the processed image to the cloud. Fourth, we gather all information and update our file name table in the
+    database. Last we increase the upload counter by 1 and update it.
+    :return:
+    '''
+
     try:
-        print("==1")
         if request.method == 'POST':
-            print("==2")
-
             file = request.files['file']
-
-            print("==6")
             # check if the post request has the file part
             if 'file' not in request.files:
                 raise Exception("No file upload in the request!")
@@ -135,7 +159,7 @@ def upload_file():
             else:
                 raise Exception("Not a Correct File Type!")
     except Exception as ex:
-        print("shit is:", str(ex))
+        print("problem is:", str(ex))
         return render_template("upload_management.html", error_msg=str(ex))
 
 @webapp.route('/uploads/<filename>')
@@ -145,6 +169,12 @@ def uploaded_file(filename):
 
 @webapp.route('/file_management')
 def file_management():
+    '''
+    This function allows user to check uploaded and processed images when the url'/file_management' is called.
+    If the session information is all valid, we will connect to the database and try to get all images with the
+    required uid and then show them.
+    :return:
+    '''
     if ('authenticated' in session) and ('username' in session):
         #check if the cookie includes username and authenticated flag
         if session['authenticated'] == True:
