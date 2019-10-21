@@ -30,14 +30,14 @@ def user_login_api():
     results = cursor.fetchall()
     numberOfExistUser = results[0][0]
 
+    if numberOfExistUser != 0:
+        return http_response(409, "Error: User name already exist!")
+
     if username == "" or password == "":
         return http_response(400, "Error: All fields are required!")
 
     if re.findall(r'\s+', username) != []:
         return http_response(400, "Error: No space allowed in user name!")
-
-    if numberOfExistUser != 0:
-        return http_response(409, "Error: User name already exist!")
 
     if (len(username) > 20 or len(username) < 1) or not all(c in validUsernameChar for c in username):
         return http_response(400, "Error: Username violation, username must have length between 1 to 20, only letters and numbers allowed")
