@@ -2,7 +2,6 @@
 # python text_detection.py --image images/lebron_james.jpg --east frozen_east_text_detection.pb
 # import the necessary packages
 import time
-
 import cv2
 import numpy as np
 from imutils.object_detection import non_max_suppression
@@ -16,11 +15,14 @@ from imutils.object_detection import non_max_suppression
 
 def imageProcess(folderPath, imgName, saveImgName):
     '''
-
-    :param folderPath:
-    :param imgName:
-    :param saveImgName:
-    :return:
+    This function implemented Opencv2 and numpy library and the “object_detection” method from imutils package.
+    The function reads a given image as a openCV image object, then it implement the object_detection method with an
+    open source database “frozen_east_text_detection.pb” which includes feature samples of texts . The function then
+    creates green squares near all the detected texts and save the processed image with the given saveImgName.
+    :param folderPath: (String) the folder path which includes the image which will be read and saved
+    :param imgName: (String) the image name which will be processed
+    :param saveImgName: (Strinh) the name of the image which will be exported after processing
+    :return: Boolean value of True indicating the process is finished successfully
     '''
     image = cv2.imread(folderPath + imgName)
     originalImgCopy = image.copy()
