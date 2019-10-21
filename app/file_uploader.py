@@ -42,12 +42,13 @@ def allowed_file(filename):
 @webapp.route('/upload', methods=['POST'])
 def upload_file():
     try:
+        print("==1")
         if request.method == 'POST':
-            try:
-                file = request.files['file']
-            except RequestEntityTooLarge:
-                return render_template("upload_management.html", error_msg="Image too large, file cannot larger than 5mb")
+            print("==2")
 
+            file = request.files['file']
+
+            print("==6")
             # check if the post request has the file part
             if 'file' not in request.files:
                 raise Exception("No file upload in the request!")
@@ -132,6 +133,7 @@ def upload_file():
             else:
                 raise Exception("Not a Correct File Type!")
     except Exception as ex:
+        print("shit is:", str(ex))
         return render_template("upload_management.html", error_msg=str(ex))
 
 @webapp.route('/uploads/<filename>')
