@@ -38,6 +38,8 @@ def user_login():
 @webapp.route('/login_submit', methods=['POST'])
 def login_submit():
     '''
+    Description:
+
     This function takes POST http request with URL of "/login_submit"
     It firstly reads the user submitted username, password and the check statue of "remember me" option
     Based on whether the user checked "remember me" the function adjust the session expiry time by adjusting value of
@@ -47,6 +49,14 @@ def login_submit():
     "login_index.html" with error message; if the user input password dosen't match the database password after bcrypt,
     the function will return the user with login_index.html" with error message; If
     :return:
+
+    Input:
+
+    XXX
+
+    Output
+    
+    YYY
     '''
     session.permanent = True
     bcrypt = Bcrypt(webapp)
