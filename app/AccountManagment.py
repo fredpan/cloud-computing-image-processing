@@ -1,11 +1,9 @@
 import datetime
 import re
 import time
-
 import mysql.connector
 from flask import render_template, redirect, url_for, request, g, session
 from flask_bcrypt import Bcrypt
-
 from app import EmailSender as email_confirmation
 from app import webapp
 from app.sql.config.DbConfig import db_config
@@ -31,13 +29,25 @@ Login Settings
 @webapp.route('/login', methods=['GET', 'POST'])
 def user_login():
     '''
-
-    :return:
+    This function takes GET/POST http request with URL of "/login"
+    It returns the user with an html website of the login page
+    :return: the rendered "login_index.html"
     '''
     return render_template("/login_index.html", title="Welcome")
 
 @webapp.route('/login_submit', methods=['POST'])
 def login_submit():
+    '''
+    This function takes POST http request with URL of "/login_submit"
+    It firstly reads the user submitted username, password and the check statue of "remember me" option
+    Based on whether the user checked "remember me" the function adjust the session expiry time by adjusting value of
+    webapp.permanent_session_lifetime
+    The function then connects to the database and reads the search results based on user inputs
+    If no search results find based on the user provided username, the function will return the user with
+    "login_index.html" with error message; if the user input password dosen't match the database password after bcrypt,
+    the function will return the user with login_index.html" with error message; If
+    :return:
+    '''
     session.permanent = True
     bcrypt = Bcrypt(webapp)
     username = request.form['username']
