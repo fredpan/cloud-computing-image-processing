@@ -110,7 +110,7 @@ def upload_file_api():
             if 'file' not in request.files:
                 return http_response(404, "No file upload in the request!")
 
-        
+
             # if user does not select file, browser also
             # submit an empty part without filename
             if file.filename == '':
