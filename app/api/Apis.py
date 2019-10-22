@@ -183,8 +183,8 @@ def upload_file_api():
         return http_response(123, "Unsupported method!")
 
     except RequestEntityTooLarge:
-        return http_response(413, "Image too large, file cannot larger than 5mb")
+        return http_response(413, "Image too large, file cannot larger than 2mb")
     except Exception as ex:
         if '413' in str(ex):
-            return http_response(413, "Image too large, file cannot larger than 5mb")
+            return http_response(413, "Image too large, file cannot larger than 2mb")
         return http_response(400, str(ex))
