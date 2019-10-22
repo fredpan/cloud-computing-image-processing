@@ -94,17 +94,11 @@ def upload_file_api():
     '''
     bcrypt = Bcrypt(webapp)
     try:
+        file = request.files['file']
         username = request.form['username']
         password = request.form['password']
 
         if request.method == 'POST':
-
-            # test if file too large:
-            try:
-                file = request.files['file']
-            except RequestEntityTooLarge:
-                return http_response(413, "Image too large, file cannot larger than 5mb")
-
 
             # check if the post request has the file part
             if 'file' not in request.files:
@@ -188,6 +182,8 @@ def upload_file_api():
                 return http_response(400, "Not a Correct File Type!"+str(file and allowed_file(file.filename))+"|"+file.filename)
         return http_response(123, "Unsupported method!")
 
+    except RequestEntityTooLarge:
+        return http_response(413, "Image too large, file cannot larger than 5mb")
     except Exception as ex:
         if '413' in str(ex):
             return http_response(413, "Image too large, file cannot larger than 5mb")
