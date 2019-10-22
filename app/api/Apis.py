@@ -98,16 +98,19 @@ def upload_file_api():
         password = request.form['password']
 
         if request.method == 'POST':
-            # check if the post request has the file part
-            if 'file' not in request.files:
-                return http_response(404, "No file upload in the request!")
 
-            #test if file too large:
+            # test if file too large:
             try:
                 file = request.files['file']
             except RequestEntityTooLarge:
                 return http_response(413, "Image too large, file cannot larger than 5mb")
 
+
+            # check if the post request has the file part
+            if 'file' not in request.files:
+                return http_response(404, "No file upload in the request!")
+
+        
             # if user does not select file, browser also
             # submit an empty part without filename
             if file.filename == '':

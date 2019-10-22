@@ -75,47 +75,8 @@ async def load_gen():
     requests['i'] += 1
     await asyncio.sleep(1.0 / 20)
 
-    upload_task = upload_file("http://pipixia.ca/api/register", "test1", "123", responses)
-    asyncio.create_task(upload_task)
-    requests['i'] += 1
-    await asyncio.sleep(1.0 / 20)
 
-    upload_task = upload_file("http://pipixia.ca/api/register", "test1", "123", responses)
-    asyncio.create_task(upload_task)
-    requests['i'] += 1
-    await asyncio.sleep(1.0 / 20)
-
-    upload_task = upload_file("http://pipixia.ca/api/register", "test1", "123", responses)
-    asyncio.create_task(upload_task)
-    requests['i'] += 1
-    await asyncio.sleep(1.0 / 20)
-
-    upload_task = upload_file("http://pipixia.ca/api/register", "test1", "123", responses)
-    asyncio.create_task(upload_task)
-    requests['i'] += 1
-    await asyncio.sleep(1.0 / 20)
-
-    upload_task = upload_file("http://pipixia.ca/api/register", "test1", "123", responses)
-    asyncio.create_task(upload_task)
-    requests['i'] += 1
-    await asyncio.sleep(1.0 / 20)
-
-    upload_task = upload_file("http://pipixia.ca/api/register", "test1", "123", responses)
-    asyncio.create_task(upload_task)
-    requests['i'] += 1
-    await asyncio.sleep(1.0 / 20)
-
-    upload_task = upload_file("http://pipixia.ca/api/register", "test1", "123", responses)
-    asyncio.create_task(upload_task)
-    requests['i'] += 1
-    await asyncio.sleep(1.0 / 20)
-
-    upload_task = upload_file("http://pipixia.ca/api/register", "test1", "123", responses)
-    asyncio.create_task(upload_task)
-    requests['i'] += 1
-    await asyncio.sleep(1.0 / 20)
-
-    for var in range(100):
+    for var in range(10):
         upload_task = upload_file("http://pipixia.ca/api/register", "handsomeFredkk" + str(var), "fakedPWD", responses)
         asyncio.create_task(upload_task)
         requests['i'] += 1
