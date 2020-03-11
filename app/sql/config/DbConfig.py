@@ -7,5 +7,5 @@ information of database IP address, default login database, database login usern
 
 db_config = {'user': 'eceme',
              'password': 'password',
-             'host': '3.223.10.25',
+             'host': '54.211.177.135',
              'database': 'ece1779'}
